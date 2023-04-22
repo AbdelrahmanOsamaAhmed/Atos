@@ -1,0 +1,110 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Maven Pro", sans-serif;
+}
+section {
+  width: 100% !important;
+}
+.main {
+  background-image: url("./assets/6327211.png");
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: white;
+  padding-top: clamp(80px, 5vw, 200px);
+  background-position: center center;
+  text-align: center;
+}
+.main h1 {
+  font-family: "Dancing Script", cursive;
+  font-size: 5rem;
+  margin-bottom: 40px;
+}
+.main h3 {
+  font-size: 2rem;
+}
+.main h3 span {
+  font-family: "Dancing Script", cursive;
+
+  color: #31b0ae;
+}
+.info {
+  background-color: #eeffff;
+  height: 50vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.info img {
+  width: 200px;
+  border-radius: 50%;
+  margin-bottom: 30px;
+}
+.info h1 {
+  font-family: "Dancing Script", cursive;
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+.info p {
+  font-size: 1.2rem;
+}
+.skills {
+  min-height: 100vh;
+  background-color: black;
+  padding: 100px 300px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.skills h1 {
+  font-family: "Dancing Script", cursive;
+  font-size: 4rem;
+  margin-bottom: 100px;
+  text-align: center;
+}
+.skill-card {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.skill-card img {
+  width: 300px;
+  border-radius: 20px;
+}
+.contact {
+  height: 40vh;
+  background-color: #eeffff;
+  padding: 100px 200px;
+  text-align: center;
+}
+.contact h1 {
+  font-family: "Dancing Script", cursive;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+@media (max-width: 1200px) {
+    .main h1{
+        font-size: 3rem;
+    }
+    .main h3{
+        font-size: 1.2rem;
+    }
+  .skills {
+    padding: 100px 50px;
+  }
+  .skill-card {
+    flex-direction: column;
+  }
+  .skill-card img {
+    width: 50px;
+  }
+  .contact {
+    padding: 100px 50px;
+  }
+}
