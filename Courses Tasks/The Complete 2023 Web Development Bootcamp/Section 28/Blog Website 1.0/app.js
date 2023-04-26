@@ -3,6 +3,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
+var _ = require("lodash");
 const posts = [];
 
 const homeStartingContent =
@@ -20,8 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  console.log(posts);
-  res.render("home", { homeStartingContent });
+  res.render("home", { homeStartingContent, posts });
 });
 app.get("/about", (req, res) => {
   res.render("about", { aboutContent });
@@ -39,6 +39,13 @@ app.post("/compose", (req, res) => {
   };
   posts.push(post);
   res.redirect("/");
+});
+app.get("/posts/:id", (req, res) => {
+  var requestedTitle = _.lowerCase(req.params.id);
+  var indexOfRequestedTitle = posts.findIndex(
+    (post) => _.lowerCase(post.title) == requestedTitle
+  );
+  res.render('post',{post:posts[indexOfRequestedTitle]})
 });
 app.listen(3000, function () {
   console.log("Server started on port 3000");
