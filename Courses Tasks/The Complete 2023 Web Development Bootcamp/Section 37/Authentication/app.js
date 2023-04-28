@@ -44,12 +44,12 @@ const facebookUsersSchema = mongoose.Schema({
 });
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
-facebookUsersSchema.plugin(passportLocalMongoose);
-facebookUsersSchema.plugin(findOrCreate);
+/* facebookUsersSchema.plugin(passportLocalMongoose);
+facebookUsersSchema.plugin(findOrCreate); */
 const User = new mongoose.model("User", userSchema);
 const FacebookUser = new mongoose.model("FacebookUser", facebookUsersSchema);
 passport.use(User.createStrategy());
-passport.use(FacebookUser.createStrategy());
+/* passport.use(FacebookUser.createStrategy()); */
 
 passport.serializeUser(function (user, cb) {
   process.nextTick(function () {
@@ -80,7 +80,7 @@ passport.use(
     }
   )
 );
-passport.use(
+/* passport.use(
   new FacebookStrategy(
     {
       clientID: process.env.FACEBOOK_APP_ID,
@@ -96,7 +96,7 @@ passport.use(
       );
     }
   )
-);
+); */
 app.get("/", function (req, res) {
   res.render("home");
 });
