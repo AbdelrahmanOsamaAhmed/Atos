@@ -80,7 +80,7 @@ passport.use(
     }
   )
 );
-/* passport.use(
+passport.use(
   new FacebookStrategy(
     {
       clientID: process.env.FACEBOOK_APP_ID,
@@ -96,7 +96,7 @@ passport.use(
       );
     }
   )
-); */
+);
 app.get("/", function (req, res) {
   res.render("home");
 });
