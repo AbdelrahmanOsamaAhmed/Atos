@@ -6,7 +6,7 @@ const MIME_TYPE_MAP = {
   "image/jpg": "jpg",
 };
 const fileUpload = multer({
-  limits: 500000,
+  limits: 50000000,
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, "uploads/images");

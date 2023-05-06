@@ -74,13 +74,17 @@ const createPlace = async (req, res, next) => {
 const updatePlace = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    throw new HttpError("Invalid inputs passed, please check your data.", 422);
+    return next(
+      new HttpError("Invalid inputs passed, please check your data.", 422)
+    );
   }
 
   const { title, description } = req.body;
   const placeId = req.params.pid;
   const updatedPlace = await Place.findById(placeId);
-
+  if (updatedPlace.creator.toString() !== req.userData.userId) {
+    return next(new HttpError("U ARE NOT ALLOWED.", 401));
+  }
   updatedPlace.title = title;
   updatedPlace.description = description;
   await updatedPlace.save();
@@ -94,6 +98,9 @@ const deletePlace = async (req, res, next) => {
   if (!place) {
     return next(new HttpError("Could not find place with id", 404));
   }
+  if (place.creator.id !== req.userData.userId) {
+    return next(new HttpError("U ARE NOT ALLOWED.", 401));
+  }
   const imagePath = place.image;
   const sess = await mongoose.startSession();
   sess.startTransaction();
@@ -101,7 +108,7 @@ const deletePlace = async (req, res, next) => {
   place.creator.places.pull(place);
   await place.creator.save({ session: sess });
   await sess.commitTransaction();
-  fs.unlink(imagePath, err => console.log(err));
+  fs.unlink(imagePath, (err) => console.log(err));
   res.status(200).json({ message: "Deleted place." });
 };
 const getAllPlaces = async (req, res, next) => {
