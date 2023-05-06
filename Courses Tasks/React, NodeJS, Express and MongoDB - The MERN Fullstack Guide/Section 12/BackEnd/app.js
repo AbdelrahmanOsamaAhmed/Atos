@@ -43,6 +43,6 @@ app.use((error, req, res, next) => {
 });
 mongoose
   .connect(
-    "mongodb+srv://admin-abdo:abdo1234@cluster0.svkswrm.mongodb.net/mernDB"
+    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.svkswrm.mongodb.net/${process.env.DB_NAME}`
   )
   .then(() => app.listen(5000));
