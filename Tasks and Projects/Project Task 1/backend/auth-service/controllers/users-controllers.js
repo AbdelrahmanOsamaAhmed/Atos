@@ -81,11 +81,8 @@ const signup = async (req, res, next) => {
       });
       break;
     case "ADMIN":
-      createdUser = new Admin({
-        ...credentials,
-      });
-      break;
-    case "SUPER-ADMIN":
+      return next(new HttpError("You cannot create a user of this type", 500));
+    case "SUPER_ADMIN":
       return next(new HttpError("You cannot create a user of this type", 500));
     default:
       return next(new HttpError("Undefined user type", 500));
@@ -93,7 +90,9 @@ const signup = async (req, res, next) => {
   try {
     await createdUser.save();
   } catch (error) {
-    new HttpError("An error has occured, Please try again later", 500);
+    return next(
+      new HttpError("An error has occured, Please try again later", 500)
+    );
   }
   let token;
   try {
@@ -109,7 +108,9 @@ const signup = async (req, res, next) => {
       }
     );
   } catch (error) {
-    new HttpError("An error has occured, Please try again later", 500);
+    return next(
+      new HttpError("An error has occured, Please try again later", 500)
+    );
   }
 
   res.status(201).json({
@@ -121,10 +122,13 @@ const signup = async (req, res, next) => {
 };
 const getAllUsers = async (req, res, next) => {
   let users;
+  if (req.userData.userType !== "SUPER_ADMIN") {
+    return next(new HttpError("Only Super Admins can do that", 500));
+  }
   try {
     users = await User.find({});
   } catch (error) {
-    new HttpError("An error has occured, Please try again later", 500);
+    return new HttpError("An error has occured, Please try again later", 500);
   }
 
   res.status(200).json(users);
