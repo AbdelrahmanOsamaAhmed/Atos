@@ -4,8 +4,9 @@ module.exports = (req, res, next) => {
   if (req.method === "OPTIONS") return next();
   try {
     const token = req.headers.authorization.split(" ")[1];
+    
     if (!token) {
-      throw new HttpError("Auth");
+      return next(new HttpError("Auth", 502));
     }
     const decodedToken = jwt.verify(token, "supersecret_jwt_token");
     req.userData = {
