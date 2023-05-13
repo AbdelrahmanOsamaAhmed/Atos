@@ -1,11 +1,50 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Container } from "react-bootstrap";
+import axios from "axios";
+import { API_QUESTIONS_URL } from "../../../Constants";
+import { AuthContext } from "../../../contexts/auth-context";
+import { useNavigate, useParams } from "react-router-dom";
 
 const CreateQuestionForm = () => {
-  const [title, setTitle] = useState("");
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState("");
+  const [subCategory, setSubCategory] = useState("");
+  const [mark, setMark] = useState();
+  const [expectedTime, setExpectedTime] = useState();
+  const navigate = useNavigate();
   const [answers, setAnswers] = useState([{ text: "", isCorrect: false }]);
+  const { token, isLoggedIn } = useContext(AuthContext);
+  /*   useEffect(() => {
+    if (!isLoggedIn) navigate("/login");
+  }, [isLoggedIn, navigate]); */
+  const { id } = useParams();
+  useEffect(() => {
+    const fetchQuestion = async () => {
+      try {
+        const response = await axios.get(API_QUESTIONS_URL + id);
+        setName(response.data.name);
+        setCategory(response.data.category);
+        setSubCategory(response.data.subCategory);
+        setMark(response.data.mark);
+        setExpectedTime(response.data.expectedTime);
+        const correctAnswersIds = response.data.correctAnswers.map(
+          (answer) => answer._id
+        );
+        const mappedAnswers = response.data.answers.map((answer) => ({
+          text: answer.description,
+          isCorrect: correctAnswersIds.includes(answer._id),
+        }));
+        setAnswers(mappedAnswers);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (id) {
+      fetchQuestion();
+    }
+  }, [id]);
   const handleAnswerChange = (event, index) => {
     const { name, value, checked } = event.target;
     const updatedAnswers = [...answers];
@@ -16,7 +55,7 @@ const CreateQuestionForm = () => {
     }
     setAnswers(updatedAnswers);
   };
-  const onSubmitHandler = (event) => {
+  const onSubmitHandler = async (event) => {
     event.preventDefault();
     const correctAnswers = answers
       .filter((answer) => answer.isCorrect)
@@ -25,9 +64,48 @@ const CreateQuestionForm = () => {
       console.log("A question must have at least one answer");
       return;
     }
-    const allAnswers = answers.map(answer => answer.text)
-    console.log({ title, answers:allAnswers, correctAnswers });
+    const question = {
+      name,
+      category: category.toLocaleLowerCase(),
+      subCategory: subCategory.toLocaleLowerCase(),
+      mark,
+      expectedTime,
+      answers,
+    };
+    try {
+      if (id) {
+        const response = await axios.patch(
+          API_QUESTIONS_URL + "update-question",
+          {
+            question,
+            id,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(response.data);
+      } else {
+        const response = await axios.post(
+          API_QUESTIONS_URL + "add-question",
+          {
+            question,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
   };
+  if (id && !answers) return <p>Wait</p>;
   return (
     <Container
       className="d-flex align-items-center justify-content-center"
@@ -46,13 +124,68 @@ const CreateQuestionForm = () => {
           <Form.Group className="mb-4" controlId="formBasicEmail">
             <Form.Label>Question</Form.Label>
             <Form.Control
-              value={title}
-              onChange={(event) => setTitle(event.target.value)}
+              value={name}
+              onChange={(event) => setName(event.target.value)}
               type="text"
               placeholder="Enter Question"
               required
             />
           </Form.Group>
+          <div
+            className="d-flex justify-content-center mb-4"
+            style={{ gap: "8px", flexWrap: "wrap" }}
+          >
+            <Form.Group>
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                value={category}
+                onChange={(event) =>
+                  setCategory(event.target.value.toLocaleLowerCase())
+                }
+                type="text"
+                placeholder="Enter Category"
+                required
+                id="1"
+                style={{ width: "180px" }}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Sub Category</Form.Label>
+              <Form.Control
+                value={subCategory}
+                onChange={(event) =>
+                  setSubCategory(event.target.value.toLocaleLowerCase())
+                }
+                type="text"
+                placeholder="Sub Category"
+                id="2"
+                required
+                style={{ width: "180px" }}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Expected Time</Form.Label>
+              <Form.Control
+                value={expectedTime || ""}
+                onChange={(event) => setExpectedTime(event.target.value)}
+                type="number"
+                placeholder="in minutes"
+                required
+                style={{ width: "120px" }}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Mark</Form.Label>
+              <Form.Control
+                value={mark || ""}
+                onChange={(event) => setMark(event.target.value)}
+                type="number"
+                placeholder="out of 10"
+                required
+                style={{ width: "80px" }}
+              />
+            </Form.Group>
+          </div>
 
           {answers.map((answer, idx) => (
             <Form.Group className="mb-3" key={idx}>
@@ -109,7 +242,8 @@ const CreateQuestionForm = () => {
             variant="primary"
             type="submit"
           >
-            Publish Question
+            {!id && "Publish"}
+            {id && "Update"} Question
           </Button>
         </Form>
       </div>

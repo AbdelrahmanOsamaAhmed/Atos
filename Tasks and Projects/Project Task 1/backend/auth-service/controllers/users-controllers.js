@@ -69,7 +69,7 @@ const signup = async (req, res, next) => {
   }
   const credentials = { userName, password: hashedPassword };
   let createdUser;
-  console.log(userType)
+  console.log(userType);
   switch (userType) {
     case "STUDENT":
       createdUser = new Student({
@@ -166,7 +166,17 @@ const createAdmin = async (req, res, next) => {
     user: user,
   });
 };
+const tokenVerifier = (req, res, next) => {
+  res.json(req.userData);
+};
+const getUserById = async (req, res, next) => {
+  const userId = req.params.id;
+  const fetchedUser = await User.findById(userId);
+  res.json(fetchedUser.toObject({ getters: true }));
+};
 exports.login = login;
 exports.signup = signup;
 exports.getAllUsers = getAllUsers;
 exports.createAdmin = createAdmin;
+exports.tokenVerifier = tokenVerifier;
+exports.getUserById = getUserById;

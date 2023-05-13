@@ -6,7 +6,7 @@ import Form from "react-bootstrap/Form";
 import { Container } from "react-bootstrap";
 import {  useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_URL } from "../../../Constants";
+import { API_USERS_URL } from "../../../Constants";
 
 const CreateAdminForm = () => {
   const userNameRef = useRef();
@@ -22,7 +22,7 @@ const CreateAdminForm = () => {
     const passwordInput = userPasswordRef.current.value;
     try {
       const response = await axios.post(
-        API_URL + "users/create-admin",
+        API_USERS_URL + "create-admin",
         {
           userName: userNameInput,
           password: passwordInput,

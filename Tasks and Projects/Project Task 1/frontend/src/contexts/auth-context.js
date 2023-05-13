@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useState } from "react";
 import axios from "axios";
-import { API_URL } from "../Constants";
+import { API_USERS_URL } from "../Constants";
 export const AuthContext = createContext({
   isLoggedIn: false,
   userId: null,
@@ -19,7 +19,7 @@ const AuthContextProvider = ({ children }) => {
   const [userType, setUserType] = useState(null);
   const login = useCallback(async (userName, password) => {
     try {
-      const response = await axios.post(API_URL + "users/login", {
+      const response = await axios.post(API_USERS_URL + "login", {
         userName,
         password,
       });
@@ -53,7 +53,7 @@ const AuthContextProvider = ({ children }) => {
   }, []);
   const signup = useCallback(async (userName, password, userType) => {
     try {
-      const response = await axios.post(API_URL + "users/signup", {
+      const response = await axios.post(API_USERS_URL + "signup", {
         userName,
         password,
         userType,
@@ -80,7 +80,7 @@ const AuthContextProvider = ({ children }) => {
     }
   }, []);
   const loginFromLocalStorage = useCallback(
-    (userName, userId, userType, token,tokenExpirationDate) => {
+    (userName, userId, userType, token, tokenExpirationDate) => {
       setUserName(userName);
       setUserId(userId);
       setUserType(userType);
