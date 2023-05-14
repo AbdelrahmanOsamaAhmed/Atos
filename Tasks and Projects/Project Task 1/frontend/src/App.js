@@ -8,6 +8,8 @@ import CreateAdminForm from "./components/Users/CreateAdmin/CreateAdminForm";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./contexts/auth-context";
 import CreateQuestionForm from "./components/Questions/CreateQuestion/CreateQuestionForm";
+import AllQuestions from "./components/Questions/AllQuestions/AllQuestions";
+import QuestionPage from "./components/Questions/QuestionPage/QuestionPage";
 function App() {
   const { loginFromLocalStorage, token, logout } = useContext(AuthContext);
   useEffect(() => {
@@ -30,7 +32,7 @@ function App() {
         ).getTime() - new Date().getTime();
 
       const timeout = setTimeout(logout, remainingTime);
-      return ()=> clearTimeout(timeout)
+      return () => clearTimeout(timeout);
     }
   }, [token, logout]);
   return (
@@ -43,6 +45,9 @@ function App() {
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/create-admin" element={<CreateAdminForm />} />
         <Route path="/create-question" element={<CreateQuestionForm />} />
+        <Route path="/all-questions" element={<AllQuestions />} />
+        <Route path="/questions/:id" element={<QuestionPage />} />
+        <Route path="/questions/update/:id" element={<CreateQuestionForm />} />
       </Routes>
     </Router>
   );

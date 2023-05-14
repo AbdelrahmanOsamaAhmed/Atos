@@ -5,12 +5,14 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import ErrorModal from "../../UI/Modal/ErrorModal";
 
 const UserLogInForm = () => {
   const navigate = useNavigate();
   const userNameRef = useRef();
   const userPasswordRef = useRef();
-  const { login, isLoggedIn } = useContext(AuthContext);
+  const { login, isLoggedIn, authError, authErrorMessage, setAuthError } =
+    useContext(AuthContext);
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     const userNameInput = userNameRef.current.value.trim();
@@ -26,6 +28,13 @@ const UserLogInForm = () => {
       className="d-flex align-items-center justify-content-center"
       style={{ height: "100vh" }}
     >
+      <ErrorModal
+        message={authErrorMessage}
+        show={authError}
+        onClose={() => {
+          setAuthError(false);
+        }}
+      />
       <div
         style={{
           padding: "40px",

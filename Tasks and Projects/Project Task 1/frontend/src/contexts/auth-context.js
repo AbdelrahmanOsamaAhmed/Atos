@@ -1,12 +1,15 @@
 import React, { createContext, useCallback, useState } from "react";
 import axios from "axios";
-import { API_URL } from "../Constants";
+import { API_USERS_URL } from "../Constants";
 export const AuthContext = createContext({
   isLoggedIn: false,
   userId: null,
   userName: null,
   userType: null,
   token: null,
+  authError: null,
+  authErrorMessage: null,
+  setAuthError: () => {},
   login: () => {},
   logout: () => {},
   signup: () => {},
@@ -17,9 +20,11 @@ const AuthContextProvider = ({ children }) => {
   const [userName, setUserName] = useState(null);
   const [userId, setUserId] = useState(null);
   const [userType, setUserType] = useState(null);
+  const [authError, setAuthError] = useState(false);
+  const [authErrorMessage, setAuthErrorMessage] = useState("");
   const login = useCallback(async (userName, password) => {
     try {
-      const response = await axios.post(API_URL + "users/login", {
+      const response = await axios.post(API_USERS_URL + "login", {
         userName,
         password,
       });
@@ -41,7 +46,8 @@ const AuthContextProvider = ({ children }) => {
         })
       );
     } catch (error) {
-      console.log(error.response.data.message);
+      setAuthError(true);
+      setAuthErrorMessage(error.response.data.message);
     }
   }, []);
   const logout = useCallback(() => {
@@ -53,7 +59,7 @@ const AuthContextProvider = ({ children }) => {
   }, []);
   const signup = useCallback(async (userName, password, userType) => {
     try {
-      const response = await axios.post(API_URL + "users/signup", {
+      const response = await axios.post(API_USERS_URL + "signup", {
         userName,
         password,
         userType,
@@ -76,11 +82,12 @@ const AuthContextProvider = ({ children }) => {
         })
       );
     } catch (error) {
-      console.log(error.response.data.message);
+      setAuthError(true);
+      setAuthErrorMessage(error.response.data.message);
     }
   }, []);
   const loginFromLocalStorage = useCallback(
-    (userName, userId, userType, token,tokenExpirationDate) => {
+    (userName, userId, userType, token, tokenExpirationDate) => {
       setUserName(userName);
       setUserId(userId);
       setUserType(userType);
@@ -101,6 +108,9 @@ const AuthContextProvider = ({ children }) => {
         signup,
         logout,
         loginFromLocalStorage,
+        authError,
+        setAuthError,
+        authErrorMessage,
       }}
     >
       {children}

@@ -1,28 +1,34 @@
-import React, {  useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useContext, useRef } from "react";
 import { AuthContext } from "../../../contexts/auth-context";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Container } from "react-bootstrap";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_URL } from "../../../Constants";
+import { API_USERS_URL } from "../../../Constants";
+import SuccessModal from "../../UI/Modal/SuccessModal";
+import ErrorModal from "../../UI/Modal/ErrorModal";
 
 const CreateAdminForm = () => {
-  const userNameRef = useRef();
-  const userPasswordRef = useRef();
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [successModal, setSuccessModal] = useState(false);
+  const [successModalMessage, setSuccessModalMessage] = useState("");
+  const [errorModal, setErrorModal] = useState(false);
+  const [errorModalMessage, setErrorModalMessage] = useState("");
   const navigate = useNavigate();
   const { token, isLoggedIn } = useContext(AuthContext);
-  useEffect(() => {
+  /* useEffect(() => {
     if (!isLoggedIn) navigate("/login");
-  }, [isLoggedIn, navigate]);
+  }, [isLoggedIn, navigate]); */
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-    const userNameInput = userNameRef.current.value.trim();
-    const passwordInput = userPasswordRef.current.value;
+    const userNameInput = userName.trim();
+    const passwordInput = password;
     try {
       const response = await axios.post(
-        API_URL + "users/create-admin",
+        API_USERS_URL + "create-admin",
         {
           userName: userNameInput,
           password: passwordInput,
@@ -33,53 +39,75 @@ const CreateAdminForm = () => {
           },
         }
       );
-      console.log(response.data);
+      setSuccessModal(true);
+      setSuccessModalMessage(response.data.message);
     } catch (error) {
+      setErrorModal(true);
+      setErrorModalMessage(error.response.data.message);
     }
   };
   return (
-      <Container
-        className="d-flex align-items-center justify-content-center"
-        style={{ height: "100vh" }}
+    <Container
+      className="d-flex align-items-center justify-content-center"
+      style={{ height: "100vh" }}
+    >
+      <SuccessModal
+        message={successModalMessage}
+        show={successModal}
+        onClose={() => {
+          setSuccessModal(false);
+          navigate("/profile");
+        }}
+      />
+      <ErrorModal
+        message={errorModalMessage}
+        show={errorModal}
+        onClose={() => {
+          setErrorModal(false);
+        }}
+      />
+      <div
+        style={{
+          padding: "40px",
+          borderRadius: "20px",
+          boxShadow:
+            " rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px",
+        }}
       >
-        <div
-          style={{
-            padding: "40px",
-            borderRadius: "20px",
-            boxShadow:
-              " rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px",
-          }}
-        >
-          <Form onSubmit={onSubmitHandler}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Admin Username</Form.Label>
-              <Form.Control
-                ref={userNameRef}
-                type="text"
-                placeholder="Enter username"
-                required
-              />
-            </Form.Group>
+        <Form onSubmit={onSubmitHandler}>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Admin Username</Form.Label>
+            <Form.Control
+              //ref={userNameRef}
+              type="text"
+              placeholder="Enter username"
+              required
+              value={userName}
+              onChange={(event) => setUserName(event.target.value)}
+            />
+          </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Admin Password</Form.Label>
-              <Form.Control
-                ref={userPasswordRef}
-                type="password"
-                placeholder="Password"
-                required
-              />
-            </Form.Group>
-            <Button
-              style={{ display: "block", margin: "0 auto" }}
-              variant="primary"
-              type="submit"
-            >
-              Create Admin
-            </Button>
-          </Form>
-        </div>
-      </Container>
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Label>Admin Password</Form.Label>
+            <Form.Control
+              //ref={userPasswordRef}
+              type="password"
+              placeholder="Password"
+              required
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+          </Form.Group>
+          <Button
+            style={{ display: "block", margin: "0 auto" }}
+            variant="primary"
+            type="submit"
+          >
+            Create Admin
+          </Button>
+        </Form>
+      </div>
+    </Container>
   );
 };
 
