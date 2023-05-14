@@ -7,7 +7,7 @@ import NavBar from "./components/UI/NavBar/NavBar";
 import CreateAdminForm from "./components/Users/CreateAdmin/CreateAdminForm";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./contexts/auth-context";
-import CreateQuestionForm from "./components/Questions/CreateQuestion/CreateQuestionForm";
+import CreateAndUpdateQuestionForm from "./components/Questions/CreateQuestion/CreateAndUpdateQuestionForm";
 import AllQuestions from "./components/Questions/AllQuestions/AllQuestions";
 import QuestionPage from "./components/Questions/QuestionPage/QuestionPage";
 function App() {
@@ -44,10 +44,16 @@ function App() {
         <Route path="/signup" element={<UserSignUpForm />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/create-admin" element={<CreateAdminForm />} />
-        <Route path="/create-question" element={<CreateQuestionForm />} />
+        <Route
+          path="/create-question"
+          element={<CreateAndUpdateQuestionForm />}
+        />
         <Route path="/all-questions" element={<AllQuestions />} />
         <Route path="/questions/:id" element={<QuestionPage />} />
-        <Route path="/questions/update/:id" element={<CreateQuestionForm />} />
+        <Route
+          path="/questions/update/:id"
+          element={<CreateAndUpdateQuestionForm />}
+        />
       </Routes>
     </Router>
   );

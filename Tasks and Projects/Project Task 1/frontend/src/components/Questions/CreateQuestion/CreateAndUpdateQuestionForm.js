@@ -9,7 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import SuccessModal from "../../UI/Modal/SuccessModal";
 import ErrorModal from "../../UI/Modal/ErrorModal";
 
-const CreateQuestionForm = () => {
+const CreateAndUpdateQuestionForm = () => {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
@@ -143,7 +143,7 @@ const CreateQuestionForm = () => {
           boxShadow:
             " rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px",
           width: "700px",
-          height: "600px",
+          maxHeight: "600px",
           overflowY: "scroll",
         }}
       >
@@ -278,4 +278,4 @@ const CreateQuestionForm = () => {
   );
 };
 
-export default CreateQuestionForm;
+export default CreateAndUpdateQuestionForm;
