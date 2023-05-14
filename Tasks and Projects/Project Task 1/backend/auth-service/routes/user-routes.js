@@ -9,6 +9,7 @@ router.post("/signup", usersControllers.signup);
 router.use(Auth);
 router.get("/token-verifier", usersControllers.tokenVerifier);
 router.get("/:id", usersControllers.getUserById);
+router.get("/user-by-name/:name", usersControllers.getUserByUserName);
 router.get("/", usersControllers.getAllUsers);
 router.post("/create-admin", usersControllers.createAdmin);
 module.exports = router;

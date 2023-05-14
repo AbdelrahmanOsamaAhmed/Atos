@@ -72,15 +72,41 @@ const getAllQuestions = async (req, res, next) => {
     return next(new HttpError("Students cant access this end point", 500));
   }
   try {
-    const fetchedQuestions = await Question.find(
-      {},
-      { _id: 1, name: 1, category: 1, subCategory: 1 }
-    );
-    res.status(200).json(fetchedQuestions);
+    const { category, subCategory, createdBy, page, limit } = req.query;
+    const query = {};
+    if (category) {
+      query.category = { $regex: category, $options: "i" };
+    }
+    if (subCategory) {
+      query.subCategory = { $regex: subCategory, $options: "i" };
+    }
+    if (createdBy) {
+      query.createdBy = createdBy;
+      console.log(createdBy);
+    }
+    const pageNumber = parseInt(page) || 1;
+    const pageSize = parseInt(limit) || 10;
+    const skip = (pageNumber - 1) * pageSize;
+    const count = await Question.countDocuments(query);
+    const fetchedQuestions = await Question.find(query, {
+      _id: 1,
+      name: 1,
+      category: 1,
+      subCategory: 1,
+    })
+      .skip(skip)
+      .limit(pageSize);
+    const totalPages = Math.ceil(count / pageSize);
+    res.status(200).json({
+      questions: fetchedQuestions,
+      totalPages,
+      currentPage: pageNumber,
+    });
   } catch (error) {
+    console.log(error);
     return next(
       new HttpError(
-        "An error occurred while saving the question, Please Try again",
+        "An error occurred while fetching the questions, Please Try again",
         401
       )
     );
@@ -96,7 +122,7 @@ const getQuestionById = async (req, res, next) => {
     console.log(error);
     return next(
       new HttpError(
-        "An error occurred while saving the question, Please Try again",
+        "An error occurred while fetching the question, Please Try again",
         401
       )
     );

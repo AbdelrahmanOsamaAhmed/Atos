@@ -188,9 +188,21 @@ const getUserById = async (req, res, next) => {
   const fetchedUser = await SuperAdmin.findById(userId);
   res.json(fetchedUser.toObject({ getters: true }));
 };
+const getUserByUserName = async (req, res, next) => {
+  try {
+    const userName = req.params.name;
+    const fetchedUser = await User.findOne({ userName: userName });
+    res.json(fetchedUser);
+  } catch (error) {
+    return next(
+      new HttpError("An error has occured, Please try again later", 500)
+    );
+  }
+};
 exports.login = login;
 exports.signup = signup;
 exports.getAllUsers = getAllUsers;
 exports.createAdmin = createAdmin;
 exports.tokenVerifier = tokenVerifier;
 exports.getUserById = getUserById;
+exports.getUserByUserName = getUserByUserName;

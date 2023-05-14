@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { API_QUESTIONS_URL } from "../../../Constants";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../../contexts/auth-context";
-import { Button } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
 import SuccessModal from "../../UI/Modal/SuccessModal";
 import ErrorModal from "../../UI/Modal/ErrorModal";
 
@@ -22,11 +22,12 @@ const QuestionPage = () => {
         const response = await axios.get(API_QUESTIONS_URL + id);
         setQuestion(response.data);
       } catch (error) {
-        console.log(error);
+        setErrorModalMessage(error.response.data.message);
+        setErrorModal(true);
       }
     };
     fetchQuestion();
-  }, [userId, id]);
+  }, [id]);
   const deleteHandler = async () => {
     try {
       const response = await axios.delete(
@@ -46,9 +47,14 @@ const QuestionPage = () => {
     }
   };
 
-  if (!question) return <p>No available questions at the moment</p>;
+  if (!question)
+    return (
+      <div style={{ padding: "120px 50px 50px" }}>
+        <p>Loading....</p>
+      </div>
+    );
   return (
-    <>
+    <div style={{ padding: "120px 50px 50px" }}>
       <SuccessModal
         message={successModalMessage}
         show={successModal}
@@ -64,13 +70,45 @@ const QuestionPage = () => {
           setErrorModal(false);
         }}
       />
+      <Container className="mb-5">
+        <h2 className="mb-4">
+          <span className="text-muted" style={{ fontSize: "22px" }}>
+            Question:
+          </span>{" "}
+          {question.name}
+        </h2>
+        <ul>
+          <h6 className="mb-4 text-muted">Options:</h6>
+          {question.answers.map((answer, idx) => (
+            <li key={idx}>
+              <h6>{answer.description}</h6>
+            </li>
+          ))}
+        </ul>
+      </Container>
+      {userType !== "STUDENT" && (
+        <Container className="mb-5">
+          <h4>Correct Answers</h4>
+          {question.correctAnswers.map((correctAnswer, idx) => (
+            <h6 key={idx}>{correctAnswer.description}</h6>
+          ))}
+        </Container>
+      )}
+
       {question.createdBy === userId && (
-        <Link to={`/questions/update/${id}`}>Edit</Link>
+        <Link
+          className="btn btn-outline-primary"
+          to={`/questions/update/${id}`}
+        >
+          Edit Question
+        </Link>
       )}
       {userType === "ADMIN" && (
-        <Button onClick={deleteHandler}>Delete this question</Button>
+        <Button className="btn btn-outline-danger" onClick={deleteHandler}>
+          Delete this question
+        </Button>
       )}
-    </>
+    </div>
   );
 };
 

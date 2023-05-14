@@ -21,7 +21,7 @@ const CreateAndUpdateQuestionForm = () => {
   const [errorModalMessage, setErrorModalMessage] = useState("");
   const navigate = useNavigate();
   const [answers, setAnswers] = useState([{ text: "", isCorrect: false }]);
-  const { token, isLoggedIn } = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
   /*   useEffect(() => {
     if (!isLoggedIn) navigate("/login");
   }, [isLoggedIn, navigate]); */
