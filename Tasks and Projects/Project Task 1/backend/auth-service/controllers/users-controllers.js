@@ -5,6 +5,7 @@ const User = require("../models/user");
 const HttpError = require("../models/http-error");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const SuperAdmin = require("../models/super-admin");
 
 const login = async (req, res, next) => {
   const { userName, password } = req.body;
@@ -136,6 +137,7 @@ const createAdmin = async (req, res, next) => {
   if (req.userData.userType !== "SUPER_ADMIN") {
     return next(new HttpError("Only Super Admins can do that", 500));
   }
+
   const existingUser = await User.findOne({ userName: userName });
   if (existingUser) {
     return next(
@@ -145,22 +147,34 @@ const createAdmin = async (req, res, next) => {
       )
     );
   }
+
   let hashedPassword;
+
   try {
     hashedPassword = await bcrypt.hash(password, 12);
   } catch (error) {
-    new HttpError("An error has occured, Please try again later", 500);
+    return next(
+      new HttpError("An error has occured, Please try again later", 500)
+    );
   }
+
   let user;
   try {
     user = new Admin({
       userName,
       password: hashedPassword,
     });
-    user.save();
+    await user.save();
+    const updatedSuperAdmin = await User.findById(req.userData.userId);
+    await updatedSuperAdmin.createdAdmins.push(user._id);
+    await updatedSuperAdmin.save();
   } catch (error) {
-    return new HttpError("An error has occured, Please try again later", 500);
+    console.log(error);
+    return next(
+      new HttpError("An error has occured, Please try again later", 500)
+    );
   }
+
   res.status(201).json({
     message: "Successfully created",
     user: user,
@@ -171,7 +185,7 @@ const tokenVerifier = (req, res, next) => {
 };
 const getUserById = async (req, res, next) => {
   const userId = req.params.id;
-  const fetchedUser = await User.findById(userId);
+  const fetchedUser = await SuperAdmin.findById(userId);
   res.json(fetchedUser.toObject({ getters: true }));
 };
 exports.login = login;

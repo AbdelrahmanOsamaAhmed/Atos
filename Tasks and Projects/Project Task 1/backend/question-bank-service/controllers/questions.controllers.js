@@ -2,7 +2,6 @@ const Question = require("../models/question");
 const HttpError = require("../models/http-error");
 const axios = require("axios");
 const mongoose = require("mongoose");
-const { response } = require("express");
 const { ObjectId } = mongoose.Types;
 
 const tokenVerifier = async (token) => {
@@ -22,14 +21,7 @@ const addQuestion = async (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
   const { userId, userType } = await tokenVerifier(token);
 
-  const {
-    name,
-    category,
-    subCategory,
-    mark,
-    expectedTime,
-    answers: questionAnswers,
-  } = question;
+  const { answers: questionAnswers } = question;
   const answers = [],
     correctAnswers = [];
 
@@ -60,9 +52,10 @@ const addQuestion = async (req, res, next) => {
     await createdQuestion.save();
     res.status(200).json({
       createdQuestion,
-      message: "Success",
+      message: "Successfully added a new question",
     });
   } catch (error) {
+    console.log(error);
     return next(
       new HttpError(
         "An error occurred while saving the question, Please Try again",
@@ -144,26 +137,24 @@ const updateQuestion = async (req, res, next) => {
   fetchedQuestion.name = question.name;
   fetchedQuestion.save();
 
-  console.log(correctAnswers);
-
-  res.json({ message: "UPDATING" });
+  res.json({ message: "Successfully updated the question" });
 };
 
 const deleteQuestion = async (req, res, next) => {
   const { id } = req.params;
+  try {
+    const token = req.headers.authorization.split(" ")[1];
 
-  const token = req.headers.authorization.split(" ")[1];
+    const { userType } = await tokenVerifier(token);
+    if (userType !== "ADMIN") {
+      return next(new HttpError("Only admins can delete questions", 500));
+    }
 
-  const { userType } = await tokenVerifier(token);
-  if (userType !== "ADMIN") {
-    return next(new HttpError("Only admins can delete questions", 500));
-  }
+    const fetchedQuestion = await Question.findById(id);
 
-  const fetchedQuestion = await Question.findById(id);
-  await fetchedQuestion.deleteOne();
-
-  if (!response) {
-    return next(new HttpError("Question not found.", 404));
+    await fetchedQuestion.deleteOne();
+  } catch (error) {
+    return next(new HttpError("An error has occured, please try again", 404));
   }
 
   res.status(200).json({ message: "Question deleted successfully." });

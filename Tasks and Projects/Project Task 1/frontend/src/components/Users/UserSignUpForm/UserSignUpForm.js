@@ -5,21 +5,21 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import ErrorModal from "../../UI/Modal/ErrorModal";
 
 const UserSignUpForm = () => {
   const navigate = useNavigate();
   const userNameRef = useRef();
   const userPasswordRef = useRef();
   const [userType, setUserType] = useState("STUDENT");
-  const { signup, isLoggedIn } = useContext(AuthContext);
-  const onSubmitHandler = async (event) => {
+  const { signup, isLoggedIn, authError, authErrorMessage, setAuthError } =
+    useContext(AuthContext);
+  const onSubmitHandler = (event) => {
     event.preventDefault();
-    try {
-      const userNameInput = userNameRef.current.value.trim();
-      const passwordInput = userPasswordRef.current.value;
-      const userTypeInput = userType;
-      signup(userNameInput, passwordInput, userTypeInput);
-    } catch (error) {}
+    const userNameInput = userNameRef.current.value.trim();
+    const passwordInput = userPasswordRef.current.value;
+    const userTypeInput = userType;
+    signup(userNameInput, passwordInput, userTypeInput);
   };
   useEffect(() => {
     if (isLoggedIn) navigate("/profile");
@@ -29,6 +29,13 @@ const UserSignUpForm = () => {
       className="d-flex align-items-center justify-content-center"
       style={{ height: "100vh" }}
     >
+      <ErrorModal
+        message={authErrorMessage}
+        show={authError}
+        onClose={() => {
+          setAuthError(false);
+        }}
+      />
       <div
         style={{
           padding: "40px",

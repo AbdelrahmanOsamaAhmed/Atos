@@ -7,7 +7,7 @@ const NavBar = () => {
   const navigate = useNavigate();
   const { isLoggedIn, logout, userType } = useContext(AuthContext);
   return (
-    <div className="bg-light w100" style={{position:'sticky',top:'0'}}>
+    <div className="bg-light w100 fixed-top" /* style={{position:'sticky',top:'0'}} */>
       <Container className="d-flex justify-content-between p-3">
         <div className="d-flex align-items-center" style={{ height: "100%" }}>
           <Link style={{ marginTop: "6px", textDecoration: "none" }} to={"/"}>

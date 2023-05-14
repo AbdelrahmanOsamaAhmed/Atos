@@ -4,12 +4,18 @@ import { API_QUESTIONS_URL } from "../../../Constants";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../../contexts/auth-context";
 import { Button } from "react-bootstrap";
+import SuccessModal from "../../UI/Modal/SuccessModal";
+import ErrorModal from "../../UI/Modal/ErrorModal";
 
 const QuestionPage = () => {
   const navigate = useNavigate();
   const { userId, userType, token } = useContext(AuthContext);
   const { id } = useParams();
   const [question, setQuestion] = useState();
+  const [successModal, setSuccessModal] = useState(false);
+  const [successModalMessage, setSuccessModalMessage] = useState("");
+  const [errorModal, setErrorModal] = useState(false);
+  const [errorModalMessage, setErrorModalMessage] = useState("");
   useEffect(() => {
     const fetchQuestion = async () => {
       try {
@@ -32,15 +38,32 @@ const QuestionPage = () => {
           },
         }
       );
-      navigate("/all-questions");
+      setSuccessModalMessage(response.data.message);
+      setSuccessModal(true);
     } catch (error) {
-      console.log(error.response.data.message);
+      setErrorModalMessage(error.response.data.message);
+      setErrorModal(true);
     }
   };
 
   if (!question) return <p>No available questions at the moment</p>;
   return (
     <>
+      <SuccessModal
+        message={successModalMessage}
+        show={successModal}
+        onClose={() => {
+          setSuccessModal(false);
+          navigate("/all-questions");
+        }}
+      />
+      <ErrorModal
+        message={errorModalMessage}
+        show={errorModal}
+        onClose={() => {
+          setErrorModal(false);
+        }}
+      />
       {question.createdBy === userId && (
         <Link to={`/questions/update/${id}`}>Edit</Link>
       )}

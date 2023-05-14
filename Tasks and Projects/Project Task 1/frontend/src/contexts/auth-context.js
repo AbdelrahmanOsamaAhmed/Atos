@@ -7,6 +7,9 @@ export const AuthContext = createContext({
   userName: null,
   userType: null,
   token: null,
+  authError: null,
+  authErrorMessage: null,
+  setAuthError: () => {},
   login: () => {},
   logout: () => {},
   signup: () => {},
@@ -17,6 +20,8 @@ const AuthContextProvider = ({ children }) => {
   const [userName, setUserName] = useState(null);
   const [userId, setUserId] = useState(null);
   const [userType, setUserType] = useState(null);
+  const [authError, setAuthError] = useState(false);
+  const [authErrorMessage, setAuthErrorMessage] = useState("");
   const login = useCallback(async (userName, password) => {
     try {
       const response = await axios.post(API_USERS_URL + "login", {
@@ -41,7 +46,8 @@ const AuthContextProvider = ({ children }) => {
         })
       );
     } catch (error) {
-      console.log(error.response.data.message);
+      setAuthError(true);
+      setAuthErrorMessage(error.response.data.message);
     }
   }, []);
   const logout = useCallback(() => {
@@ -76,7 +82,8 @@ const AuthContextProvider = ({ children }) => {
         })
       );
     } catch (error) {
-      console.log(error.response.data.message);
+      setAuthError(true);
+      setAuthErrorMessage(error.response.data.message);
     }
   }, []);
   const loginFromLocalStorage = useCallback(
@@ -101,6 +108,9 @@ const AuthContextProvider = ({ children }) => {
         signup,
         logout,
         loginFromLocalStorage,
+        authError,
+        setAuthError,
+        authErrorMessage,
       }}
     >
       {children}

@@ -6,6 +6,8 @@ import axios from "axios";
 import { API_QUESTIONS_URL } from "../../../Constants";
 import { AuthContext } from "../../../contexts/auth-context";
 import { useNavigate, useParams } from "react-router-dom";
+import SuccessModal from "../../UI/Modal/SuccessModal";
+import ErrorModal from "../../UI/Modal/ErrorModal";
 
 const CreateQuestionForm = () => {
   const [name, setName] = useState("");
@@ -13,6 +15,10 @@ const CreateQuestionForm = () => {
   const [subCategory, setSubCategory] = useState("");
   const [mark, setMark] = useState();
   const [expectedTime, setExpectedTime] = useState();
+  const [successModal, setSuccessModal] = useState(false);
+  const [successModalMessage, setSuccessModalMessage] = useState("");
+  const [errorModal, setErrorModal] = useState(false);
+  const [errorModalMessage, setErrorModalMessage] = useState("");
   const navigate = useNavigate();
   const [answers, setAnswers] = useState([{ text: "", isCorrect: false }]);
   const { token, isLoggedIn } = useContext(AuthContext);
@@ -61,7 +67,8 @@ const CreateQuestionForm = () => {
       .filter((answer) => answer.isCorrect)
       .map((answer) => answer.text);
     if (correctAnswers.length === 0) {
-      console.log("A question must have at least one answer");
+      setErrorModalMessage("A question must have at least one correct answer");
+      setErrorModal(true);
       return;
     }
     const question = {
@@ -86,7 +93,8 @@ const CreateQuestionForm = () => {
             },
           }
         );
-        console.log(response.data);
+        setSuccessModalMessage(response.data.message);
+        setSuccessModal(true);
       } else {
         const response = await axios.post(
           API_QUESTIONS_URL + "add-question",
@@ -99,10 +107,12 @@ const CreateQuestionForm = () => {
             },
           }
         );
-        console.log(response.data);
+        setSuccessModalMessage(response.data.message);
+        setSuccessModal(true);
       }
     } catch (error) {
-      console.log(error.response.data.message);
+      setErrorModalMessage(error.response.data.message);
+      setErrorModal(true);
     }
   };
   if (id && !answers) return <p>Wait</p>;
@@ -111,6 +121,21 @@ const CreateQuestionForm = () => {
       className="d-flex align-items-center justify-content-center"
       style={{ height: "100vh" }}
     >
+      <SuccessModal
+        message={successModalMessage}
+        show={successModal}
+        onClose={() => {
+          setSuccessModal(false);
+          navigate("/all-questions");
+        }}
+      />
+      <ErrorModal
+        message={errorModalMessage}
+        show={errorModal}
+        onClose={() => {
+          setErrorModal(false);
+        }}
+      />
       <div
         style={{
           padding: "40px",
@@ -118,6 +143,8 @@ const CreateQuestionForm = () => {
           boxShadow:
             " rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px",
           width: "700px",
+          height: "600px",
+          overflowY: "scroll",
         }}
       >
         <Form onSubmit={onSubmitHandler}>
@@ -186,7 +213,6 @@ const CreateQuestionForm = () => {
               />
             </Form.Group>
           </div>
-
           {answers.map((answer, idx) => (
             <Form.Group className="mb-3" key={idx}>
               <Form.Label>Answers Options</Form.Label>
@@ -213,6 +239,7 @@ const CreateQuestionForm = () => {
               </div>
             </Form.Group>
           ))}
+
           <div className="mb-4 d-flex" style={{ gap: "5px" }}>
             <Button
               type="button"
