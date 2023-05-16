@@ -6,7 +6,7 @@ const questionSchema = new mongoose.Schema({
   subCategory: { type: String, required: true },
   mark: { type: Number, required: true },
   expectedTime: { type: Number, required: true },
-  createdBy: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
+  createdBy: { type: mongoose.Types.ObjectId, required: true, ref: "Teacher" },
   createdAt: { type: Date, required: true },
   answers: [
     {
