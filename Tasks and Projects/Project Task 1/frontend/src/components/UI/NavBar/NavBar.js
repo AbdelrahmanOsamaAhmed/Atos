@@ -7,38 +7,52 @@ const NavBar = () => {
   const navigate = useNavigate();
   const { isLoggedIn, logout, userType } = useContext(AuthContext);
   return (
-    <div className="bg-light w100 fixed-top" /* style={{position:'sticky',top:'0'}} */>
+    <div className="w100 fixed-top" style={{ backgroundColor: "transparent" }}>
       <Container className="d-flex justify-content-between p-3">
         <div className="d-flex align-items-center" style={{ height: "100%" }}>
-          <Link style={{ marginTop: "6px", textDecoration: "none" }} to={"/"}>
+          <Link style={{ marginTop: "6px" }} to={"/"}>
             Home
           </Link>
         </div>
         {!isLoggedIn && (
           <div className="d-flex" style={{ gap: "5px" }}>
-            <Button
+            <button
+              className="navbar__btn"
               onClick={() => navigate("/signup")}
               variant="outline-primary"
             >
               Sign up
-            </Button>
-            <Button onClick={() => navigate("/login")}>Log in</Button>
+            </button>
+            <button
+              className="navbar__btn" onClick={() => navigate("/login")}>Log in</button>
           </div>
         )}
         {isLoggedIn && (
-          <div className="d-flex" style={{ gap: "5px" }}>
+          <div className="d-flex" style={{ gap: "10px" }}>
             {userType === "SUPER_ADMIN" && (
-              <Button onClick={() => navigate("/create-admin")}>
+              <button
+                className="navbar__btn"
+                onClick={() => navigate("/create-admin")}
+              >
                 Create Admin
-              </Button>
+              </button>
             )}
             {userType === "TEACHER" && (
-              <Button onClick={() => navigate("/create-question")}>
+              <button
+                className="navbar__btn"
+                onClick={() => navigate("/create-question")}
+              >
                 Create Question
-              </Button>
+              </button>
             )}
-            <Button onClick={() => navigate("/profile")}>Profile</Button>
-            <Button
+            <button
+              className="navbar__btn"
+              onClick={() => navigate("/profile")}
+            >
+              Profile
+            </button>
+            <button
+              className="navbar__btn"
               onClick={() => {
                 logout();
                 navigate("/login");
@@ -46,7 +60,7 @@ const NavBar = () => {
               variant="outline-primary"
             >
               Logout
-            </Button>
+            </button>
           </div>
         )}
       </Container>
