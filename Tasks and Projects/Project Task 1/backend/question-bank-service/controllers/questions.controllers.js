@@ -82,7 +82,6 @@ const getAllQuestions = async (req, res, next) => {
     }
     if (createdBy) {
       query.createdBy = createdBy;
-      console.log(createdBy);
     }
     const pageNumber = parseInt(page) || 1;
     const pageSize = parseInt(limit) || 10;
