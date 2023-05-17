@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { AuthContext } from "../../../contexts/auth-context";
 import { Button, Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import './NavBar.css'
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -9,11 +10,10 @@ const NavBar = () => {
   return (
     <div className="w100 fixed-top" style={{ backgroundColor: "transparent" }}>
       <Container className="d-flex justify-content-between p-3">
-        <div className="d-flex align-items-center" style={{ height: "100%" }}>
-          <Link style={{ marginTop: "6px" }} to={"/"}>
+        
+          <Link className="navbar__brand" style={{ marginTop: "10px" }} to={"/"}>
             Home
           </Link>
-        </div>
         {!isLoggedIn && (
           <div className="d-flex" style={{ gap: "5px" }}>
             <button

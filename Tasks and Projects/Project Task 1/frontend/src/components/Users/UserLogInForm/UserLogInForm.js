@@ -6,6 +6,7 @@ import Form from "react-bootstrap/Form";
 import { Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import ErrorModal from "../../UI/Modal/ErrorModal";
+import "../Form.css";
 
 const UserLogInForm = () => {
   const navigate = useNavigate();
@@ -24,10 +25,7 @@ const UserLogInForm = () => {
   }, [isLoggedIn, navigate]);
 
   return (
-    <Container
-      className="d-flex align-items-center justify-content-center"
-      style={{ height: "100vh" }}
-    >
+    <section className="d-flex align-items-center justify-content-center secondary">
       <ErrorModal
         message={authErrorMessage}
         show={authError}
@@ -35,14 +33,7 @@ const UserLogInForm = () => {
           setAuthError(false);
         }}
       />
-      <div
-        style={{
-          padding: "40px",
-          borderRadius: "20px",
-          boxShadow:
-            " rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px",
-        }}
-      >
+      <div className="form">
         <Form onSubmit={onSubmitHandler}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Username</Form.Label>
@@ -69,20 +60,20 @@ const UserLogInForm = () => {
 
           <p>
             Don't have an account?{" "}
-            <Link to="/signup" style={{ textDecoration: "none" }}>
+            <Link className="link" to="/signup" style={{ textDecoration: "none" }}>
               Sign up
             </Link>
           </p>
-          <Button
-            style={{ display: "block", margin: "0 auto" }}
-            variant="primary"
+          <button
+            style={{ display: "block", margin: "0 auto", height: "auto" }}
+            className="navbar__btn"
             type="submit"
           >
             Log in
-          </Button>
+          </button>
         </Form>
       </div>
-    </Container>
+    </section>
   );
 };
 
