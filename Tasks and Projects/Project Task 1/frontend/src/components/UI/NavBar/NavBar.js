@@ -1,14 +1,24 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../../contexts/auth-context";
-import { Button, Container, Navbar } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Container, Navbar } from "react-bootstrap";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./NavBar.css";
 
 const NavBar = () => {
   const navigate = useNavigate();
   const { isLoggedIn, logout, userType } = useContext(AuthContext);
+  const location = useLocation();
+
+  const isAllQuestion =
+    location.pathname.includes("/all-question") ||
+    location.pathname.includes("questions");
+
   return (
-    <Navbar className="fixed-top" expand="lg" variant="dark" bg="transparent">
+    <Navbar
+      className={`fixed-top ${isAllQuestion ? "bg-dark" : "bg-transparent"}`}
+      expand="lg"
+      variant="dark"
+    >
       <Container>
         <Link className="navbar__brand" to={"/"}>
           Home

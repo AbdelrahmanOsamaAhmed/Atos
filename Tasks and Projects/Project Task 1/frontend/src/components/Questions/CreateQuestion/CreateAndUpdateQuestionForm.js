@@ -117,8 +117,8 @@ const CreateAndUpdateQuestionForm = () => {
   };
   if (id && !answers) return <p>Wait</p>;
   return (
-    <Container
-      className="d-flex align-items-center justify-content-center"
+    <section
+      className="d-flex align-items-center justify-content-center secondary"
       style={{ height: "100vh" }}
     >
       <SuccessModal
@@ -137,11 +137,8 @@ const CreateAndUpdateQuestionForm = () => {
         }}
       />
       <div
+      className="form"
         style={{
-          padding: "40px",
-          borderRadius: "20px",
-          boxShadow:
-            " rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px",
           width: "700px",
           maxHeight: "600px",
           overflowY: "scroll",
@@ -246,7 +243,7 @@ const CreateAndUpdateQuestionForm = () => {
               onClick={() =>
                 setAnswers([...answers, { text: "", isCorrect: false }])
               }
-              variant="outline-primary"
+              variant="outline-secondary"
             >
               Add answer option
             </Button>
@@ -264,17 +261,17 @@ const CreateAndUpdateQuestionForm = () => {
               </Button>
             )}
           </div>
-          <Button
-            style={{ display: "block", margin: "0 auto" }}
-            variant="primary"
+          <button
+            style={{ display: "block", margin: "0 auto", height: "auto" }}
+            className="navbar__btn"
             type="submit"
           >
             {!id && "Publish"}
             {id && "Update"} Question
-          </Button>
+          </button>
         </Form>
       </div>
-    </Container>
+    </section>
   );
 };
 
