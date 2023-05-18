@@ -9,15 +9,36 @@ const Home = () => {
   return (
     <section className="d-flex align-items-center justify-content-center main text-center">
       <Container className="main__wrapper">
-        <h1>Welcome to your favourite question bank</h1>
-        <p>The only place teachers need to post and share their questions.</p>
+        {!userType && (
+          <>
+            <h1>Unlock Your Learning Potential!</h1>
+            <p>
+              Our platform offers a vast selection of questions and quizzes that
+              cover a wide range of topics.
+            </p>
+          </>
+        )}
         {userType && userType !== "STUDENT" && (
-          <button
-            className="main__btn"
-            onClick={() => navigate("/all-questions")}
-          >
-            See All Questions
-          </button>
+          <>
+            <h1>Unlock your students' potential!</h1>
+            <p>Say goodbye to boring lessons with our dynamic question bank.</p>
+            <button
+              className="main__btn"
+              onClick={() => navigate("/all-questions")}
+            >
+              See All Questions
+            </button>
+          </>
+        )}
+        {userType === "STUDENT" && (
+          <>
+            <h1>Get Ready to Ace Your Exams!</h1>
+            <p>
+              Prepare for exams and quizzes with ease. Our platform offers a
+              vast selection of questions and quizzes that cover a wide range of
+              topics.
+            </p>
+          </>
         )}
       </Container>
     </section>
