@@ -151,7 +151,7 @@ const AllQuestions = () => {
                   category: {question.category} <br /> subcategory:{" "}
                   {question.subCategory}
                 </Card.Text>
-                <Link to={`/questions/${question._id}`}>Go to question</Link>
+                <Link className="link" to={`/questions/${question._id}`}>Go to question</Link>
               </Card.Body>
             </Card>
           ))}
