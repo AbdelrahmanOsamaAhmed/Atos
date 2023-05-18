@@ -47,7 +47,11 @@ const AuthContextProvider = ({ children }) => {
       );
     } catch (error) {
       setAuthError(true);
-      setAuthErrorMessage(error.response.data.message);
+      setAuthErrorMessage(
+        error.response
+          ? error.response.data.message
+          : "An error has occurred. please try again later"
+      );
     }
   }, []);
   const logout = useCallback(() => {
@@ -83,7 +87,11 @@ const AuthContextProvider = ({ children }) => {
       );
     } catch (error) {
       setAuthError(true);
-      setAuthErrorMessage(error.response.data.message);
+      setAuthErrorMessage(
+        error.response
+          ? error.response.data.message
+          : "An error has occurred. please try again later"
+      );
     }
   }, []);
   const loginFromLocalStorage = useCallback(

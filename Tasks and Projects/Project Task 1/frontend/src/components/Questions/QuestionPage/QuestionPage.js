@@ -22,7 +22,11 @@ const QuestionPage = () => {
         const response = await axios.get(API_QUESTIONS_URL + id);
         setQuestion(response.data);
       } catch (error) {
-        setErrorModalMessage(error.response.data.message);
+        setErrorModalMessage(
+          error.response
+            ? error.response.data.message
+            : "An error has occurred. please try again later"
+        );
         setErrorModal(true);
       }
     };
@@ -42,7 +46,11 @@ const QuestionPage = () => {
       setSuccessModalMessage(response.data.message);
       setSuccessModal(true);
     } catch (error) {
-      setErrorModalMessage(error.response.data.message);
+      setErrorModalMessage(
+        error.response
+          ? error.response.data.message
+          : "An error has occurred. please try again later"
+      );
       setErrorModal(true);
     }
   };

@@ -43,7 +43,11 @@ const CreateAdminForm = () => {
       setSuccessModalMessage(response.data.message);
     } catch (error) {
       setErrorModal(true);
-      setErrorModalMessage(error.response.data.message);
+      setErrorModalMessage(
+        error.response
+          ? error.response.data.message
+          : "An error has occurred. please try again later"
+      );
     }
   };
   return (

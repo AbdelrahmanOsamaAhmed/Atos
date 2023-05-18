@@ -1,0 +1,43 @@
+.card-wrapper {
+  padding: 90px 50px 50px;
+  gap: 25px;
+
+}
+.search-form-wrapper {
+  margin: 0 auto;
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-around;
+  width: 1000px;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+.search-form-background {
+  width: 100%;
+  background-color: #f7f6f1;
+}
+.card {
+  width: 18rem;
+  transition: 0.2s ease-in-out;
+}
+.hr {
+  height: 3px;
+}
+
+.card:hover {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+@media screen and (max-width: 1000px) {
+  .search-form-wrapper {
+    width: auto;
+    display: block;
+  }
+  .card-wrapper {
+    padding: 50px 10px 10px;
+  }
+  .pages-btn {
+    padding-bottom: 30px;
+  }
+}

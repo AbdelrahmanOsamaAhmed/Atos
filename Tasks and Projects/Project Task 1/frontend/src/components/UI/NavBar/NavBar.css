@@ -24,9 +24,9 @@
 
 @media screen and (max-width: 1000px) {
   .navbar {
-    padding: 10px 30px;
+    padding: 10px 50px;
   }
-  .navbar__brand{
+  .navbar__brand {
     font-size: 40px;
   }
 }

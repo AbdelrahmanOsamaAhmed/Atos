@@ -44,7 +44,11 @@ const CreateAndUpdateQuestionForm = () => {
         }));
         setAnswers(mappedAnswers);
       } catch (error) {
-        console.log(error);
+        setErrorModalMessage(
+          error.response
+            ? error.response.data.message
+            : "An error has occurred. please try again later"
+        );
       }
     };
     if (id) {
@@ -111,7 +115,11 @@ const CreateAndUpdateQuestionForm = () => {
         setSuccessModal(true);
       }
     } catch (error) {
-      setErrorModalMessage(error.response.data.message);
+      setErrorModalMessage(
+        error.response
+          ? error.response.data.message
+          : "An error has occurred. please try again later"
+      );
       setErrorModal(true);
     }
   };
@@ -137,7 +145,7 @@ const CreateAndUpdateQuestionForm = () => {
         }}
       />
       <div
-      className="form"
+        className="form"
         style={{
           width: "700px",
           maxHeight: "600px",

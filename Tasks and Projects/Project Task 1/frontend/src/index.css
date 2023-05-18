@@ -23,7 +23,7 @@ section {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  color: #e9e0c8;
+  color: white;
 }
 .secondary {
   background-image: url("./assets/backgroundBlurred.jpg");
@@ -56,6 +56,10 @@ section {
 }
 .main__btn:hover {
   transform: scale(1.12);
+}
+.form-control:focus {
+  border-color: #f7f6f1 !important;
+  box-shadow: 0 0 0 0.2rem rgba(33, 37, 41, 0.3) !important;
 }
 a {
   color: #ebbd8a;
