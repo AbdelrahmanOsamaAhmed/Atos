@@ -8,11 +8,7 @@ const NavBar = () => {
   const navigate = useNavigate();
   const { isLoggedIn, logout, userType } = useContext(AuthContext);
   return (
-    <Navbar
-      className="w100 fixed-top "
-      style={{ backgroundColor: "transparent" }}
-      expand="lg"
-    >
+    <Navbar className="fixed-top" expand="lg" variant="dark" bg="transparent">
       <Container>
         <Link className="navbar__brand" to={"/"}>
           Home
