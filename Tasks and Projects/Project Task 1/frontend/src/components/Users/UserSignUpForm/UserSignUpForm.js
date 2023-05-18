@@ -25,10 +25,7 @@ const UserSignUpForm = () => {
     if (isLoggedIn) navigate("/profile");
   }, [isLoggedIn, navigate]);
   return (
-    <Container
-      className="d-flex align-items-center justify-content-center"
-      style={{ height: "100vh" }}
-    >
+    <section className="d-flex align-items-center justify-content-center secondary">
       <ErrorModal
         message={authErrorMessage}
         show={authError}
@@ -36,14 +33,7 @@ const UserSignUpForm = () => {
           setAuthError(false);
         }}
       />
-      <div
-        style={{
-          padding: "40px",
-          borderRadius: "20px",
-          boxShadow:
-            " rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px",
-        }}
-      >
+      <div className="form">
         <Form onSubmit={onSubmitHandler}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Username</Form.Label>
@@ -80,21 +70,25 @@ const UserSignUpForm = () => {
           </Form.Group>
 
           <p>
-            Already have an account?{" "}
-            <Link to="/login" style={{ textDecoration: "none" }}>
+            Already have an account?
+            <Link
+              className="link"
+              to="/login"
+              style={{ textDecoration: "none" }}
+            >
               Log in
             </Link>
           </p>
-          <Button
-            style={{ display: "block", margin: "0 auto" }}
-            variant="primary"
+          <button
+            style={{ display: "block", margin: "0 auto", height: "auto" }}
+            className="navbar__btn"
             type="submit"
           >
             Sign Up
-          </Button>
+          </button>
         </Form>
       </div>
-    </Container>
+    </section>
   );
 };
 

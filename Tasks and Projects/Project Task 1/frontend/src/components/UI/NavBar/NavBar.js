@@ -1,56 +1,86 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../../contexts/auth-context";
-import { Button, Container } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Container, Navbar } from "react-bootstrap";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import "./NavBar.css";
 
 const NavBar = () => {
   const navigate = useNavigate();
   const { isLoggedIn, logout, userType } = useContext(AuthContext);
+  const location = useLocation();
+
+  const isAllQuestion =
+    location.pathname.includes("/all-question") ||
+    location.pathname.includes("questions");
+
   return (
-    <div className="bg-light w100 fixed-top" /* style={{position:'sticky',top:'0'}} */>
-      <Container className="d-flex justify-content-between p-3">
-        <div className="d-flex align-items-center" style={{ height: "100%" }}>
-          <Link style={{ marginTop: "6px", textDecoration: "none" }} to={"/"}>
-            Home
-          </Link>
-        </div>
-        {!isLoggedIn && (
-          <div className="d-flex" style={{ gap: "5px" }}>
-            <Button
-              onClick={() => navigate("/signup")}
-              variant="outline-primary"
-            >
-              Sign up
-            </Button>
-            <Button onClick={() => navigate("/login")}>Log in</Button>
-          </div>
-        )}
-        {isLoggedIn && (
-          <div className="d-flex" style={{ gap: "5px" }}>
-            {userType === "SUPER_ADMIN" && (
-              <Button onClick={() => navigate("/create-admin")}>
-                Create Admin
-              </Button>
-            )}
-            {userType === "TEACHER" && (
-              <Button onClick={() => navigate("/create-question")}>
-                Create Question
-              </Button>
-            )}
-            <Button onClick={() => navigate("/profile")}>Profile</Button>
-            <Button
-              onClick={() => {
-                logout();
-                navigate("/login");
-              }}
-              variant="outline-primary"
-            >
-              Logout
-            </Button>
-          </div>
-        )}
+    <Navbar
+      className={`fixed-top ${isAllQuestion ? "bg-dark" : "bg-transparent"}`}
+      expand="lg"
+      variant="dark"
+    >
+      <Container>
+        <Link className="navbar__brand" to={"/"}>
+          Home
+        </Link>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse className="justify-content-end">
+          {!isLoggedIn && (
+            <div className="d-flex justify-content-end" style={{ gap: "10px" }}>
+              <button
+                className="navbar__btn"
+                onClick={() => navigate("/signup")}
+                variant="outline-primary"
+              >
+                Sign up
+              </button>
+              <button
+                className="navbar__btn"
+                onClick={() => navigate("/login")}
+              >
+                Log in
+              </button>
+            </div>
+          )}
+          {isLoggedIn && (
+            <div className="d-flex navbar__btn-wrapper" style={{ gap: "10px" }}>
+              {userType === "SUPER_ADMIN" && (
+                <button
+                  className="navbar__btn"
+                  onClick={() => navigate("/create-admin")}
+                >
+                  Create Admin
+                </button>
+              )}
+              {userType === "TEACHER" && (
+                <button
+                  className="navbar__btn"
+                  onClick={() => navigate("/create-question")}
+                >
+                  Create Question
+                </button>
+              )}
+              <button
+                className="navbar__btn"
+                onClick={() => navigate("/profile")}
+              >
+                Profile
+              </button>
+              <button
+                className="navbar__btn"
+                onClick={() => {
+                  logout();
+                  navigate("/login");
+                }}
+                variant="outline-primary"
+              >
+                Logout
+              </button>
+            </div>
+          )}
+        </Navbar.Collapse>
       </Container>
-    </div>
+    </Navbar>
   );
 };
 

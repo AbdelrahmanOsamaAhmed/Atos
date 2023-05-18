@@ -64,7 +64,7 @@ const AllQuestions = () => {
   if (!questions) return <h1>No Questions</h1>;
   return (
     <>
-      <div style={{ padding: "120px 50px 50px" }}>
+      <section style={{ padding: "120px 50px 50px" }}>
         <Form.Group className="mb-3" controlId="formBasicCategory">
           <Form.Label>Category</Form.Label>
           <Form.Control
@@ -95,6 +95,7 @@ const AllQuestions = () => {
             }}
           />
         </Form.Group>
+
         <ErrorModal
           message={errorModalMessage}
           show={errorModal}
@@ -106,8 +107,8 @@ const AllQuestions = () => {
           className="row mt-5 justify-content-around"
           style={{ margin: "0 auto" }}
         >
-          <Button
-            className="col-12 col-md-auto mb-3 mb-md-0 me-md-3"
+          <button
+            className="col-12 col-md-auto mb-3 mb-md-0 me-md-3 navbar__btn"
             onClick={() => {
               if (page > 1) setPage((page) => page - 1);
               else {
@@ -117,15 +118,15 @@ const AllQuestions = () => {
             }}
           >
             Previous Page
-          </Button>
-          <div className="col-12 col-md-6 text-center mb-3 mb-md-0">
+          </button>
+          <div className="col-12 col-md-6 text-center mb-3 mb-md-0 ">
             <span style={{ display: "inline-block", marginRight: "20px" }}>
               Current page: {page}
             </span>
             <span>Total Pages: {totalPages}</span>
           </div>
-          <Button
-            className="col-12 col-md-auto"
+          <button
+            className="col-12 col-md-auto navbar__btn"
             onClick={() => {
               if (page < totalPages) setPage((page) => page + 1);
               else {
@@ -135,7 +136,7 @@ const AllQuestions = () => {
             }}
           >
             Next Page
-          </Button>
+          </button>
         </Container>
         <div
           className="d-flex flex-wrap justify-content-center"
@@ -150,12 +151,12 @@ const AllQuestions = () => {
                   category: {question.category} <br /> subcategory:{" "}
                   {question.subCategory}
                 </Card.Text>
-                <Link to={`/questions/${question._id}`}>Go to question</Link>
+                <Link className="link" to={`/questions/${question._id}`}>Go to question</Link>
               </Card.Body>
             </Card>
           ))}
         </div>
-      </div>
+      </section>
     </>
   );
 };
