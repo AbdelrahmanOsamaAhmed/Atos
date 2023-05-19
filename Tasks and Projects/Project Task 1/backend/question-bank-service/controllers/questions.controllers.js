@@ -72,7 +72,7 @@ const getAllQuestions = async (req, res, next) => {
     return next(new HttpError("Students cant access this end point", 500));
   }
   try {
-    const { category, subCategory, createdBy, page, limit } = req.query;
+    const { category, subCategory, createdBy, page, numberPerPage } = req.query;
     const query = {};
     if (category) {
       query.category = { $regex: category, $options: "i" };
@@ -84,7 +84,7 @@ const getAllQuestions = async (req, res, next) => {
       query.createdBy = createdBy;
     }
     const pageNumber = parseInt(page) || 1;
-    const pageSize = parseInt(limit) || 10;
+    const pageSize = parseInt(numberPerPage) || 10;
     const skip = (pageNumber - 1) * pageSize;
     const count = await Question.countDocuments(query);
     const fetchedQuestions = await Question.find(query, {

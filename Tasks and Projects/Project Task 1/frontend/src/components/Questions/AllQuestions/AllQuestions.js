@@ -18,6 +18,7 @@ const AllQuestions = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [errorModal, setErrorModal] = useState(false);
   const [errorModalMessage, setErrorModalMessage] = useState("");
+  const [numberPerPage, setNumberPerPage] = useState(10);
   useEffect(() => {
     const fetchQuestion = async () => {
       let userId = "";
@@ -49,7 +50,7 @@ const AllQuestions = () => {
       }
       let url =
         API_QUESTIONS_URL +
-        `?category=${category}&subCategory=${subCategory}&page=${page}&createdBy=${userId}`;
+        `?category=${category}&subCategory=${subCategory}&page=${page}&createdBy=${userId}&numberPerPage=${numberPerPage}`;
       try {
         const response = await axios.get(url, {
           headers: {
@@ -68,7 +69,7 @@ const AllQuestions = () => {
       }
     };
     token && fetchQuestion();
-  }, [token, category, subCategory, page, createdBy]);
+  }, [token, category, subCategory, page, createdBy, numberPerPage]);
   if (!questions) return <h1>No Questions</h1>;
   return (
     <>
@@ -109,6 +110,18 @@ const AllQuestions = () => {
                 }}
               />
             </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicCreatedBy">
+              <Form.Label>Number Per Page:</Form.Label>
+              <Form.Select
+                style={{ minWidth: "200px" }}
+                onChange={(event) => setNumberPerPage(event.target.value)}
+              >
+                <option value={10}>10</option>
+                <option value={15}>15</option>
+                <option value={20}>20</option>
+                <option value={30}>30</option>
+              </Form.Select>
+            </Form.Group>
           </div>
           <hr className="hr" />
         </div>
@@ -124,7 +137,7 @@ const AllQuestions = () => {
         <div className="d-flex flex-wrap justify-content-center card-wrapper">
           {questions.length === 0 && <h3>No Questions</h3>}
           {questions.map((question, idx) => (
-            <Card className="card" key={idx} style={{ width: "18rem" }}>
+            <Card className="card" key={idx}>
               <Card.Body>
                 <Card.Title>{question.name}</Card.Title>
                 <Card.Text>
@@ -139,7 +152,7 @@ const AllQuestions = () => {
           ))}
         </div>
         <Container
-          className="row mt-5 justify-content-around mb-auto pages-btn"
+          className="row mt-5 align-items-center justify-content-around mb-auto pages-btn"
           style={{ margin: "0 auto" }}
         >
           <button

@@ -10,8 +10,8 @@ const NavBar = () => {
   const location = useLocation();
 
   const isAllQuestion =
-    location.pathname.includes("/all-question") ||
-    location.pathname.includes("questions");
+    location.pathname.includes("questions") ||
+    location.pathname.includes("profile");
 
   return (
     <Navbar
