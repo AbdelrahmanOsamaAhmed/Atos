@@ -11,7 +11,8 @@ const NavBar = () => {
 
   const isAllQuestion =
     location.pathname.includes("questions") ||
-    location.pathname.includes("profile");
+    location.pathname.includes("profile") ||
+    location.pathname.includes("exam");
 
   return (
     <Navbar
@@ -53,12 +54,20 @@ const NavBar = () => {
                 </button>
               )}
               {userType === "TEACHER" && (
-                <button
-                  className="navbar__btn"
-                  onClick={() => navigate("/create-question")}
-                >
-                  Create Question
-                </button>
+                <>
+                  <button
+                    className="navbar__btn"
+                    onClick={() => navigate("/create-question")}
+                  >
+                    Create Question
+                  </button>
+                  <button
+                    className="navbar__btn"
+                    onClick={() => navigate("/exams/submit")}
+                  >
+                    Submit your exam
+                  </button>
+                </>
               )}
               <button
                 className="navbar__btn"

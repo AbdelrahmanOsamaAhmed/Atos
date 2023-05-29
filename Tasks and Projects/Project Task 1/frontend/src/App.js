@@ -10,6 +10,10 @@ import { AuthContext } from "./contexts/auth-context";
 import CreateAndUpdateQuestionForm from "./components/Questions/CreateQuestion/CreateAndUpdateQuestionForm";
 import AllQuestions from "./components/Questions/AllQuestions/AllQuestions";
 import QuestionPage from "./components/Questions/QuestionPage/QuestionPage";
+import ExamSubmitForm from "./components/Exams/ExamSubmitForm/ExamSubmitForm";
+import ExamPage from "./components/Exams/ExamPage/ExamPage";
+import AssignExam from "./components/Exams/AssignExam/AssignExam";
+import AllExams from "./components/Exams/AllExams/AllExams";
 function App() {
   const { loginFromLocalStorage, token, logout } = useContext(AuthContext);
   useEffect(() => {
@@ -20,7 +24,7 @@ function App() {
         userFromLocalStorage.userId,
         userFromLocalStorage.userType,
         userFromLocalStorage.token,
-        userFromLocalStorage.tokenExpirationDate
+        userFromLocalStorage.tokenExpirationDate,
       );
     }
   }, [loginFromLocalStorage]);
@@ -50,6 +54,10 @@ function App() {
         />
         <Route path="/all-questions" element={<AllQuestions />} />
         <Route path="/questions/:id" element={<QuestionPage />} />
+        <Route path="/exams/submit" element={<ExamSubmitForm />} />
+        <Route path="/exams/all-exams" element={<AllExams />} />
+        <Route path="/exams/:id" element={<ExamPage />} />
+        <Route path="/exams/assign-exam/:id" element={<AssignExam />} />
         <Route
           path="/questions/update/:id"
           element={<CreateAndUpdateQuestionForm />}

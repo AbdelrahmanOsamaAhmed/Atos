@@ -4,12 +4,15 @@ import App from "./App";
 import AuthContextProvider from "./contexts/auth-context";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import ExamContextProvider from "./contexts/exam-context";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <AuthContextProvider>
-      <App />
+      <ExamContextProvider>
+        <App />
+      </ExamContextProvider>
     </AuthContextProvider>
   </React.StrictMode>
 );

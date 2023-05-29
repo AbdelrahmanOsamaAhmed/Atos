@@ -6,6 +6,7 @@ import { AuthContext } from "../../../contexts/auth-context";
 import { Button, Container } from "react-bootstrap";
 import SuccessModal from "../../UI/Modal/SuccessModal";
 import ErrorModal from "../../UI/Modal/ErrorModal";
+import { ExamContext } from "../../../contexts/exam-context";
 
 const QuestionPage = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const QuestionPage = () => {
   const [successModalMessage, setSuccessModalMessage] = useState("");
   const [errorModal, setErrorModal] = useState(false);
   const [errorModalMessage, setErrorModalMessage] = useState("");
+  const { addQuestionToExam } = useContext(ExamContext);
   useEffect(() => {
     const fetchQuestion = async () => {
       try {
@@ -115,6 +117,14 @@ const QuestionPage = () => {
         <Button className="btn btn-outline-danger" onClick={deleteHandler}>
           Delete this question
         </Button>
+      )}
+      {userType === "TEACHER" && (
+        <button
+          className="btn btn-outline-primary"
+          onClick={() => addQuestionToExam(question)}
+        >
+          Add to exam
+        </button>
       )}
     </div>
   );

@@ -28,6 +28,12 @@ const Home = () => {
             >
               See All Questions
             </button>
+            <button
+              className="main__btn"
+              onClick={() => navigate("/exams/all-exams")}
+            >
+              See All Exams
+            </button>
           </>
         )}
         {userType === "STUDENT" && (

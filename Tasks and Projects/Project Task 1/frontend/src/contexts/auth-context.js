@@ -32,6 +32,7 @@ const AuthContextProvider = ({ children }) => {
       setUserName(response.data.userName);
       setUserId(response.data.userId);
       setUserType(response.data.userType);
+
       const tokenExpirationDate = new Date(
         new Date().getTime() + 1000 * 60 * 60
       );

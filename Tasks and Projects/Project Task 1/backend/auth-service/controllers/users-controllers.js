@@ -131,6 +131,16 @@ const getAllUsers = async (req, res, next) => {
 
   res.status(200).json(users);
 };
+const getAllStudents = async (req, res, next) => {
+  let users;
+  try {
+    users = await User.find({ userType: "STUDENT" }, { userName: 1, _id: 1 });
+  } catch (error) {
+    return new HttpError("An error has occured, Please try again later", 500);
+  }
+
+  res.status(200).json(users);
+};
 const createAdmin = async (req, res, next) => {
   const { userName, password } = req.body;
 
@@ -199,6 +209,19 @@ const getUserByUserName = async (req, res, next) => {
     );
   }
 };
+const assignExamInstanceToStudent = async (req, res, next) => {
+  const { studentId, examInstanceId } = req.body;
+  try {
+    const student = await Student.findById(studentId);
+    student.examInstances.push(examInstanceId);
+    await student.save();
+    res.status(200).json({ messege: "Successfully assigned" });
+  } catch (error) {
+    return next(
+      new HttpError("An error has occured, Please try again later", 500)
+    );
+  }
+};
 exports.login = login;
 exports.signup = signup;
 exports.getAllUsers = getAllUsers;
@@ -206,3 +229,5 @@ exports.createAdmin = createAdmin;
 exports.tokenVerifier = tokenVerifier;
 exports.getUserById = getUserById;
 exports.getUserByUserName = getUserByUserName;
+exports.getAllStudents = getAllStudents;
+exports.assignExamInstanceToStudent = assignExamInstanceToStudent;
