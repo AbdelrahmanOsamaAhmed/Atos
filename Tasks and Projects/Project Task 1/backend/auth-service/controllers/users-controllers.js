@@ -222,6 +222,28 @@ const assignExamInstanceToStudent = async (req, res, next) => {
     );
   }
 };
+
+exports.addKeyCloakUserNameToDataBase = async (req, res, next) => {
+  const { userName, userType } = req.body;
+  try {
+    let user = await User.findOne({ userName });
+
+    if (user) {
+      user.userType = userType;
+      await user.save();
+    } else {
+      user = new User({ userName, userType });
+      await user.save();
+    }
+
+    res.json({
+      message: "User successfully updated/created",
+      userId: user._id,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 exports.login = login;
 exports.signup = signup;
 exports.getAllUsers = getAllUsers;

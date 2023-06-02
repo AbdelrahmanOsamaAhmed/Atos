@@ -14,8 +14,18 @@ import ExamSubmitForm from "./components/Exams/ExamSubmitForm/ExamSubmitForm";
 import ExamPage from "./components/Exams/ExamPage/ExamPage";
 import AssignExam from "./components/Exams/AssignExam/AssignExam";
 import AllExams from "./components/Exams/AllExams/AllExams";
+import useKeyCloak from "./hooks/useKeyCloak";
 function App() {
-  const { loginFromLocalStorage, token, logout } = useContext(AuthContext);
+  const [
+    isLoggedIn,
+    keyCloakToken,
+    userId,
+    userName,
+    userType,
+    tokenExpirationDate,
+  ] = useKeyCloak();
+  const { loginFromLocalStorage, token, logout, loginWithKeyCloak } =
+    useContext(AuthContext);
   useEffect(() => {
     const userFromLocalStorage = JSON.parse(localStorage.getItem("user"));
     if (userFromLocalStorage) {
@@ -24,10 +34,30 @@ function App() {
         userFromLocalStorage.userId,
         userFromLocalStorage.userType,
         userFromLocalStorage.token,
-        userFromLocalStorage.tokenExpirationDate,
+        userFromLocalStorage.tokenExpirationDate
       );
     }
-  }, [loginFromLocalStorage]);
+    if (isLoggedIn) {
+      loginWithKeyCloak(
+        keyCloakToken,
+        userName,
+        userId,
+        userType,
+        tokenExpirationDate
+      );
+    }
+  }, [
+    loginFromLocalStorage,
+    keyCloakToken,
+    userName,
+    isLoggedIn,
+    loginWithKeyCloak,
+    tokenExpirationDate,
+    userId,
+    userType,
+  ]);
+
+  /* // This code for automatically logging out, not fully compatible with keycloak
   useEffect(() => {
     if (token) {
       const remainingTime =
@@ -38,7 +68,10 @@ function App() {
       const timeout = setTimeout(logout, remainingTime);
       return () => clearTimeout(timeout);
     }
-  }, [token, logout]);
+  }, [token, logout]); */
+
+  if (!isLoggedIn) return <>Notloggedin</>;
+
   return (
     <Router>
       <NavBar />

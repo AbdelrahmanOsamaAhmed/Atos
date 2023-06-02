@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useState } from "react";
 import axios from "axios";
 import { API_USERS_URL } from "../Constants";
+import { client } from "../hooks/useKeyCloak";
 export const AuthContext = createContext({
   isLoggedIn: false,
   userId: null,
@@ -61,6 +62,7 @@ const AuthContextProvider = ({ children }) => {
     setUserId(null);
     setUserType(null);
     localStorage.removeItem("user");
+    client.logout();
   }, []);
   const signup = useCallback(async (userName, password, userType) => {
     try {
@@ -104,6 +106,40 @@ const AuthContextProvider = ({ children }) => {
     },
     []
   );
+  const loginWithKeyCloak = useCallback(
+    async (token, userName, userId, userType, tokenExpirationDate) => {
+      try {
+        setToken(token);
+        setUserName(userName);
+        setUserType(userType);
+
+        const response = await axios.post(API_USERS_URL + "/keycloak", {
+          userName,
+          userType,
+        });
+        setUserId(response.data.userId);
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            userName: userName,
+            userId: response.data.userId,
+            userType: userType,
+            token: token,
+            tokenExpirationDate,
+          })
+        );
+      } catch (error) {
+        setAuthError(true);
+        setAuthErrorMessage(
+          error.response
+            ? error.response.data.message
+            : "An error has occurred. please try again later"
+        );
+      }
+    },
+    []
+  );
 
   return (
     <AuthContext.Provider
@@ -120,6 +156,7 @@ const AuthContextProvider = ({ children }) => {
         authError,
         setAuthError,
         authErrorMessage,
+        loginWithKeyCloak,
       }}
     >
       {children}

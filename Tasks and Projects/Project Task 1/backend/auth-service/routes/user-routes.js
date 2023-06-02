@@ -6,6 +6,7 @@ const router = Router();
 
 router.post("/login", usersControllers.login);
 router.post("/signup", usersControllers.signup);
+router.post("/keycloak",usersControllers.addKeyCloakUserNameToDataBase)
 router.use(Auth);
 router.get("/students", usersControllers.getAllStudents);
 router.get("/token-verifier", usersControllers.tokenVerifier);
