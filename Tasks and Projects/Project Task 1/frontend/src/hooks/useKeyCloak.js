@@ -12,7 +12,7 @@ const useKeyCloak = () => {
   const [keyCloakToken, setToken] = useState(null);
   const [isLogin, setLogin] = useState(false);
   const [userType, setUserType] = useState("STUDENT");
-  const [userId, setUderId] = useState("");
+  const [userId, setUserId] = useState("");
   const [userName, setUserName] = useState("");
   const [tokenExpirationDate, setTokenExpirationDate] = useState();
 
@@ -29,7 +29,7 @@ const useKeyCloak = () => {
         if (client.realmAccess.roles.includes("TEACHER"))
           setUserType("TEACHER");
         console.log(client);
-        setUderId(client.subject);
+        setUserId(client.subject);
         setLogin(res);
         setToken(client.token);
         setUserName(client.tokenParsed.preferred_username);

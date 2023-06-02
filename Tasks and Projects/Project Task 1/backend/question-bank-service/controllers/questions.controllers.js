@@ -67,12 +67,8 @@ const addQuestion = async (req, res, next) => {
 
 const getAllQuestions = async (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
-  try {
-    const response = await tokenVerifier(token);
-    //console.log(response);
-  } catch (error) {
-    console.log(error)
-  }
+  const { userId, userType } = await tokenVerifier(token);
+
   if (userType === "STUDENT") {
     return next(new HttpError("Students cant access this end point", 500));
   }

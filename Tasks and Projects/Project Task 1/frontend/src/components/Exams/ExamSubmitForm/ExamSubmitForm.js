@@ -1,10 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { ExamContext } from "../../../contexts/exam-context";
 import Form from "react-bootstrap/Form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Card } from "react-bootstrap";
+import SuccessModal from "../../UI/Modal/SuccessModal";
 
 const ExamSubmitForm = () => {
+  //const navigate = useNavigate();
+
   const {
     examQuestions,
     examName,
@@ -16,6 +19,14 @@ const ExamSubmitForm = () => {
   } = useContext(ExamContext);
   return (
     <section style={{ padding: "120px 0px 50px" }} className="section-wrapper">
+      {/* <SuccessModal
+        message={"The exam definition was successfully submitted."}
+        show={successModal}
+        onClose={() => {
+          setSuccessModal(false);
+          navigate("/all-questions");
+        }}
+      /> */}
       <div style={{ maxWidth: "1000px", margin: "0 auto", padding: "0 30px" }}>
         <h1>Review your exam</h1>
         <Form

@@ -33,7 +33,6 @@ const ExamPage = () => {
       const response = await axios.post(
         API_EXAM_URL + "update-start-time/" + exam.id
       );
-      console.log(response.data);
       const updatedExam = await axios.get(API_EXAM_URL + "instance/" + exam.id);
       setExam(updatedExam.data);
     };

@@ -118,14 +118,14 @@ const AuthContextProvider = ({ children }) => {
           userType,
         });
         setUserId(response.data.userId);
-
+        setToken(`${token}+${response.data.userId}`);
         localStorage.setItem(
           "user",
           JSON.stringify({
             userName: userName,
             userId: response.data.userId,
             userType: userType,
-            token: token,
+            token: `${token}+${response.data.userId}`,
             tokenExpirationDate,
           })
         );

@@ -121,7 +121,13 @@ const QuestionPage = () => {
       {userType === "TEACHER" && (
         <button
           className="btn btn-outline-primary"
-          onClick={() => addQuestionToExam(question)}
+          onClick={() => {
+            addQuestionToExam(question);
+            setSuccessModalMessage(
+              "The question has been added to the exam definition. Press submit exam to submit your exam definition."
+            );
+            setSuccessModal(true);
+          }}
         >
           Add to exam
         </button>
