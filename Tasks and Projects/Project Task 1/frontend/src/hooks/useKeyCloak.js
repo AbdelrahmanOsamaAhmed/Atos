@@ -28,7 +28,6 @@ const useKeyCloak = () => {
         setTokenExpirationDate(new Date(client.tokenParsed.exp * 1000));
         if (client.realmAccess.roles.includes("TEACHER"))
           setUserType("TEACHER");
-        console.log(client);
         setUserId(client.subject);
         setLogin(res);
         setToken(client.token);

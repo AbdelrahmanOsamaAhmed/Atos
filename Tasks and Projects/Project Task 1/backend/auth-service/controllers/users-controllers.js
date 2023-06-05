@@ -227,7 +227,6 @@ exports.addKeyCloakUserNameToDataBase = async (req, res, next) => {
   const { userName, userType } = req.body;
   try {
     let user = await User.findOne({ userName });
-
     if (user) {
       user.userType = userType;
       await user.save();
