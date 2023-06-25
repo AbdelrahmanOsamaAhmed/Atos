@@ -216,7 +216,6 @@ exports.gradeExamInstance = async (req, res, next) => {
 
 exports.checkAssignedExams = async (req, res, next) => {
   const { id } = req.params;
-  console.log(id)
   kafkaConfig.consume(id, (value) => {
     io.emit(
       id,
