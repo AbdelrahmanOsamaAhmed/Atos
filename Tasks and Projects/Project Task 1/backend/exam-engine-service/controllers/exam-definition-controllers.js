@@ -1,5 +1,24 @@
 const { ExamDefinition, Question, ExamInstance } = require("../models");
 const axios = require("axios");
+const KafkaConfig = require("../config.js");
+const mongoose = require("mongoose");
+const io = require("socket.io")(3001, {
+  cors: {
+    origin: ["http://localhost:3000"],
+  },
+});
+
+io.on("connection", (socket) => console.log('Connected'));
+const kafkaConfig = new KafkaConfig();
+const kafkaHandler = async (studentId) => {
+  try {
+    const kafkaConfig = new KafkaConfig();
+    const messages = [{ key: "key1", value: "Kafka Working" }];
+    kafkaConfig.produce(studentId, messages);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const tokenVerifier = async (token) => {
   const response = await axios.get(
@@ -79,7 +98,7 @@ const CreateExamInstance = async (req, res, next) => {
   }
   const { id } = req.body.exam;
   const { studentId, startTime, endTime } = req.body;
-  console.log(req.body);
+
   const createdInstance = await ExamInstance.create({
     exam_definition_id: id,
     createdBy: userId,
@@ -87,6 +106,7 @@ const CreateExamInstance = async (req, res, next) => {
     schduledtimeTo: endTime,
     takenBy: studentId,
   });
+  await kafkaHandler(new mongoose.Types.ObjectId(studentId).toString());
   res.json({ createdInstanceId: createdInstance.id });
 };
 
@@ -194,6 +214,17 @@ exports.gradeExamInstance = async (req, res, next) => {
   res.json("OK");
 };
 
+exports.checkAssignedExams = async (req, res, next) => {
+  const { id } = req.params;
+  console.log(id)
+  kafkaConfig.consume(id, (value) => {
+    io.emit(
+      id,
+      "An exam has been assigned to you, go to your profile to see more details"
+    );
+  });
+  res.status(200).json("Successfully Connected");
+};
 exports.getAllExamsDefinitions = getAllExamsDefinitions;
 exports.createExamDefinition = createExamDefinition;
 exports.deleteExamDefinitionById = deleteExamDefinitionById;

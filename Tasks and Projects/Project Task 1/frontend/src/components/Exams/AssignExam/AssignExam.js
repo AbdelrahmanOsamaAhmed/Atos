@@ -87,12 +87,8 @@ const AssignExam = () => {
           },
         }
       );
-      const { createdInstanceId } = response.data;
-      /**
-       * the approach is to send this created instance id to the student db.
-       * show all exam instances that are assigned to the student in his profile.
-       * mark them whether absent or not
-       */
+
+      /* const { createdInstanceId } = response.data;
       const studentResponse = await axios.post(
         API_USERS_URL + "assign-instance",
         {
@@ -104,7 +100,8 @@ const AssignExam = () => {
             Authorization: `Bearer ${token}`,
           },
         }
-      );
+      ); */
+      console.log("Success");
       setSuccessModal(true);
     } catch (error) {}
   };

@@ -5,15 +5,19 @@ const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Types;
 
 const tokenVerifier = async (token) => {
-  const response = await axios.get(
-    "http://localhost:5000/api/users/token-verifier",
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  return response.data;
+  try {
+    const response = await axios.get(
+      "http://localhost:5000/api/users/token-verifier",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("error");
+  }
 };
 
 const addQuestion = async (req, res, next) => {
@@ -67,7 +71,8 @@ const addQuestion = async (req, res, next) => {
 
 const getAllQuestions = async (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
-  const { userId, userType } = await tokenVerifier(token);
+  const { userId, userType } =  await tokenVerifier(token);
+  
 
   if (userType === "STUDENT") {
     return next(new HttpError("Students cant access this end point", 500));
@@ -103,7 +108,7 @@ const getAllQuestions = async (req, res, next) => {
       currentPage: pageNumber,
     });
   } catch (error) {
-    console.log(error);
+    console.log('error');
     return next(
       new HttpError(
         "An error occurred while fetching the questions, Please Try again",

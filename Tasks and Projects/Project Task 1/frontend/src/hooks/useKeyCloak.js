@@ -35,6 +35,13 @@ const useKeyCloak = () => {
       });
   }, []);
 
-  return [isLogin, keyCloakToken, userId, userName, userType,tokenExpirationDate];
+  return [
+    isLogin,
+    keyCloakToken,
+    userId,
+    userName,
+    userType,
+    tokenExpirationDate,
+  ];
 };
 export default useKeyCloak;

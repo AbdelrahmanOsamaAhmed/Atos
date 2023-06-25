@@ -10,9 +10,10 @@ const ExamPage = () => {
   //const [exam, setExam] = useState();
   const [submittedExam, setSubmittedExam] = useState({});
   const [selectedAnswers, setSelectedAnswers] = useState([]);
+  const location = useLocation();
   const { id } = useParams();
   const { userId } = useContext(AuthContext);
-  const [exam, setExam] = useState(useLocation().state.exam);
+  const [exam, setExam] = useState(useLocation().state);
   const [disable, setDisable] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
   const navigate = useNavigate();
@@ -37,17 +38,15 @@ const ExamPage = () => {
       setExam(updatedExam.data);
     };
     const dateNow = new Date();
-    const scheduledTo = new Date(exam.scheduledtimeTo);
+    const scheduledTo = new Date(exam.schduledtimeTo);
     const endTime = exam.endTime ? new Date(exam.endTime) : null;
 
     if (exam && !exam.startTime) updateTime();
-
-    if (dateNow > scheduledTo || (endTime && dateNow > endTime)) {
+    if (dateNow >= scheduledTo || (endTime && dateNow >= endTime)) {
       setDisable(true);
       return;
     }
   }, [exam]);
-
   const updateSelectedAnswers = (question) => {
     setSelectedAnswers((prev) => [
       ...prev,

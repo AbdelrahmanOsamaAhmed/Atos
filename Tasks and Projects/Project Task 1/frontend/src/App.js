@@ -15,6 +15,10 @@ import ExamPage from "./components/Exams/ExamPage/ExamPage";
 import AssignExam from "./components/Exams/AssignExam/AssignExam";
 import AllExams from "./components/Exams/AllExams/AllExams";
 import useKeyCloak from "./hooks/useKeyCloak";
+import { io } from "socket.io-client";
+import axios from "axios";
+import { API_EXAM_URL } from "./Constants";
+
 function App() {
   const [
     isLoggedIn,
@@ -24,8 +28,13 @@ function App() {
     userType,
     tokenExpirationDate,
   ] = useKeyCloak();
-  const { loginFromLocalStorage, token, logout, loginWithKeyCloak } =
-    useContext(AuthContext);
+  const {
+    loginFromLocalStorage,
+    token,
+    logout,
+    loginWithKeyCloak,
+    userId: socketUserId,
+  } = useContext(AuthContext);
   useEffect(() => {
     const userFromLocalStorage = JSON.parse(localStorage.getItem("user"));
     if (userFromLocalStorage) {
@@ -69,6 +78,19 @@ function App() {
       return () => clearTimeout(timeout);
     }
   }, [token, logout]); */
+
+  useEffect(() => {
+    const socketStart = async () => {
+      if (socketUserId && userType === "STUDENT") {
+        await axios.get(API_EXAM_URL + "check-assigned-exams/" + socketUserId);
+        const socket = io("http://localhost:3001");
+        socket.on(socketUserId, (data) => {
+          alert(data);
+        });
+      }
+    };
+    socketStart();
+  }, [socketUserId]);
 
   if (!isLoggedIn) return <>Notloggedin</>;
 

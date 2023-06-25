@@ -12,6 +12,8 @@ const UserProfile = () => {
   const { userName, userType, userId, isLoggedIn } = useContext(AuthContext);
   const [examInstances, setExamInstances] = useState([]);
 
+
+
   useEffect(() => {
     const fetchExamInstances = async () => {
       const response = await axios.get(API_EXAM_URL + "instances", {
@@ -60,13 +62,19 @@ const UserProfile = () => {
                     )}
                   </>
                 )}
-                <Link
-                  className="link"
-                  to={`/exams/${exam.id}`}
-                  state={{ exam }}
-                >
-                  Go to Exam
-                </Link>
+                {
+                  /* new Date() < new Date(exam.schduledtimeTo) &&  */ <Link
+                    className="link"
+                    to={`/exams/${exam.id}`}
+                    state={exam}
+                    /* disabled={
+                      new Date() >= new Date(exam.schduledtimeTo) ||
+                      (exam.endTime && new Date() >= new Date(exam.endTime))
+                    } */
+                  >
+                    Go to Exam
+                  </Link>
+                }
               </Card.Body>
             </Card>
           ))}
