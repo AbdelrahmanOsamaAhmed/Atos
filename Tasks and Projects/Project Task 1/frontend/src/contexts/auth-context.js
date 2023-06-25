@@ -1,7 +1,9 @@
 import React, { createContext, useCallback, useState } from "react";
 import axios from "axios";
-import { API_USERS_URL } from "../Constants";
+import { API_EXAM_URL, API_USERS_URL } from "../Constants";
 import { client } from "../hooks/useKeyCloak";
+import { io } from "socket.io-client";
+
 export const AuthContext = createContext({
   isLoggedIn: false,
   userId: null,
@@ -23,6 +25,7 @@ const AuthContextProvider = ({ children }) => {
   const [userType, setUserType] = useState(null);
   const [authError, setAuthError] = useState(false);
   const [authErrorMessage, setAuthErrorMessage] = useState("");
+  let socket, idForKafka;
   const login = useCallback(async (userName, password) => {
     try {
       const response = await axios.post(API_USERS_URL + "login", {
@@ -56,13 +59,15 @@ const AuthContextProvider = ({ children }) => {
       );
     }
   }, []);
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    await axios.post(API_EXAM_URL + "stop-consumer/" + idForKafka);
     setToken(null);
     setUserName(null);
     setUserId(null);
     setUserType(null);
     localStorage.removeItem("user");
     client.logout();
+    socket.disconnect();
   }, []);
   const signup = useCallback(async (userName, password, userType) => {
     try {
@@ -129,6 +134,16 @@ const AuthContextProvider = ({ children }) => {
             tokenExpirationDate,
           })
         );
+        if (userType === "STUDENT") {
+          idForKafka = response.data.userId;
+          await axios.get(
+            API_EXAM_URL + "check-assigned-exams/" + response.data.userId
+          );
+          socket = io("http://localhost:3001");
+          socket.on(response.data.userId, (data) => {
+            alert(data);
+          });
+        }
       } catch (error) {
         setAuthError(true);
         setAuthErrorMessage(

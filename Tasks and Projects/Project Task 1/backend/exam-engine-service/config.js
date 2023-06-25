@@ -38,6 +38,15 @@ class KafkaConfig {
       console.error(error);
     }
   }
+
+  async stopConsumer(topic) {
+    try {
+      await this.consumer.stop();
+      console.log(`Consumer stopped for topic ${topic}`);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
 
 module.exports = KafkaConfig;

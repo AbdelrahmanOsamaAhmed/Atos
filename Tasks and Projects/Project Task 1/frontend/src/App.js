@@ -79,7 +79,7 @@ function App() {
     }
   }, [token, logout]); */
 
-  useEffect(() => {
+  /* useEffect(() => {
     const socketStart = async () => {
       if (socketUserId && userType === "STUDENT") {
         await axios.get(API_EXAM_URL + "check-assigned-exams/" + socketUserId);
@@ -90,7 +90,7 @@ function App() {
       }
     };
     socketStart();
-  }, [socketUserId]);
+  }, [socketUserId]); */
 
   if (!isLoggedIn) return <>Notloggedin</>;
 

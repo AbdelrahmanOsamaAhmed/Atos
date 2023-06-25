@@ -8,7 +8,12 @@ const io = require("socket.io")(3001, {
   },
 });
 
-io.on("connection", (socket) => console.log('Connected'));
+io.on("connection", (socket) => {
+  console.log("Connected");
+  socket.on("disconnect", (reason) => {
+    console.log(`disconnect ${socket.id} due to ${reason}`);
+  });
+});
 const kafkaConfig = new KafkaConfig();
 const kafkaHandler = async (studentId) => {
   try {
@@ -223,6 +228,12 @@ exports.checkAssignedExams = async (req, res, next) => {
     );
   });
   res.status(200).json("Successfully Connected");
+};
+exports.stopConsumer = async (req, res, next) => {
+  const { id } = req.params;
+  console.log(id)
+  kafkaConfig.stopConsumer(id);
+  res.status(200).json("Consumer stopped successfully");
 };
 exports.getAllExamsDefinitions = getAllExamsDefinitions;
 exports.createExamDefinition = createExamDefinition;

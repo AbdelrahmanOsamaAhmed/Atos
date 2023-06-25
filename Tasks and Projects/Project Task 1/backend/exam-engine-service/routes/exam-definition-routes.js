@@ -6,6 +6,7 @@ router.get(
   "/check-assigned-exams/:id",
   ExamDefinitionController.checkAssignedExams
 );
+router.post("/stop-consumer/:id", ExamDefinitionController.stopConsumer);
 router.get("/instances", ExamDefinitionController.getArrayOfExamInstancesById);
 router.get("/:id", ExamDefinitionController.getExamDefinitionById);
 router.post("/instance", ExamDefinitionController.CreateExamInstance);
