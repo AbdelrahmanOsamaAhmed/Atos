@@ -60,6 +60,7 @@ const AuthContextProvider = ({ children }) => {
     }
   }, []);
   const logout = useCallback(async () => {
+    console.log(idForKafka);
     await axios.post(API_EXAM_URL + "stop-consumer/" + idForKafka);
     setToken(null);
     setUserName(null);
@@ -134,16 +135,14 @@ const AuthContextProvider = ({ children }) => {
             tokenExpirationDate,
           })
         );
-        if (userType === "STUDENT") {
-          idForKafka = response.data.userId;
-          await axios.get(
-            API_EXAM_URL + "check-assigned-exams/" + response.data.userId
-          );
-          socket = io("http://localhost:3001");
-          socket.on(response.data.userId, (data) => {
-            alert(data);
-          });
-        }
+        idForKafka = response.data.userId;
+        await axios.get(
+          API_EXAM_URL + "check-assigned-exams/" + response.data.userId
+        );
+        socket = io("http://localhost:3001");
+        socket.on(response.data.userId, (data) => {
+          alert(data);
+        });
       } catch (error) {
         setAuthError(true);
         setAuthErrorMessage(

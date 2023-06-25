@@ -141,7 +141,9 @@ const AssignExam = () => {
           <Form.Label>Start Time</Form.Label>
           <Form.Control
             type="datetime-local"
-            value={startTime.toISOString().slice(0, -8)}
+            value={new Date(startTime.getTime() + 3 * 60 * 60 * 1000)
+              .toISOString()
+              .slice(0, -8)}
             onChange={(e) => setStartTime(new Date(e.target.value))}
           />
         </Form.Group>
@@ -150,7 +152,9 @@ const AssignExam = () => {
           <Form.Label>End Time</Form.Label>
           <Form.Control
             type="datetime-local"
-            value={endTime.toISOString().slice(0, -8)}
+            value={new Date(endTime.getTime() + 3 * 60 * 60 * 1000)
+              .toISOString()
+              .slice(0, -8)}
             onChange={(e) => setEndTime(new Date(e.target.value))}
           />
         </Form.Group>
